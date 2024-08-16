@@ -35,6 +35,7 @@ return [
         ],
     ],
 
+// for google services (add more socials service if you like or if you need)
     'google' => [
     'client_id' => env('GOOGLE_CLIENT_ID'),
     'client_secret' => env('GOOGLE_CLIENT_SECRET'),

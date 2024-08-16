@@ -9,11 +9,11 @@ use Laravel\Socialite\Facades\Socialite;
 
 class GoogleAuthController extends Controller
 {
-    public function redirect()
+    public function redirect() //google redirect function
     {
         return Socialite::driver('google')->redirect();
     }
-    public function callbackGoogle()
+    public function callbackGoogle() //google callback function to dashboard
     {
         try{
             $google_user = Socialite::driver('google')->user();
