@@ -31,8 +31,11 @@
                         <input type="checkbox" id="remember" name="remember" class="form-checkbox text-blue-400">
                         <label for="remember" class="ml-2 text-gray-300">Remember me</label>
                     </div>
-                    {{-- {{ route('password.request') }} --}}
-                    <a href="" class="text-blue-400 hover:text-blue-600">Forgot password?</a>
+                    <div class="flex flex-col text-right">
+                        <a href="{{route('register')}}" class="text-blue-400 hover:text-blue-600">Register</a>
+                        {{-- {{ route('password.request') }} --}}
+                        <a href="" class="text-blue-400 hover:text-blue-600">Forgot password?</a>
+                    </div>
                 </div>
 
                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">

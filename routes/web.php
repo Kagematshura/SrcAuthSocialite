@@ -10,6 +10,9 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
+Route::get('/register', [PageController::class, 'register'])->name('register');
+Route::get('/welcome', [PageController::class, 'welcome'])->name('welcome');
+
 
 Route::get('/google', [GoogleAuthController::class, 'redirect'])->name('google-auth');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callbackGoogle']);

@@ -10,4 +10,14 @@ class PageController extends Controller
     {
         return view('dashboard');
     }
+
+    public function register()
+    {
+        return view('register');
+    }
+
+    public function welcome()
+    {
+        return view('welcome');
+    }
 }
