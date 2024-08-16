@@ -13,6 +13,7 @@
                 <h2 class="text-3xl font-bold text-white mb-2">Sign in to your account</h2>
             </div>
 
+
             <!-- Laravel Login Form -->
             <form method="POST" action="{{ route('login') }}" class="mt-6">
                 @csrf
@@ -25,6 +26,16 @@
                     <label for="password" class="block text-gray-300 font-bold mb-2">Password</label>
                     <input type="password" id="password" name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your password" required>
                 </div>
+
+                @if ($errors->any())
+                    <div class="mb-4">
+                        <ul class="text-red-500 list-disc list-inside">
+                             @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                             @endforeach
+                        </ul>
+                    </div>
+                 @endif
 
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center">
