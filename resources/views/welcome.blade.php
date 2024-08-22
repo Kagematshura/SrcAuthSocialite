@@ -14,7 +14,7 @@
             </div>
 
 
-            <!-- Laravel Login Form -->
+            <!-- Login Form -->
             <form method="POST" action="{{ route('login') }}" class="mt-6">
                 @csrf
                 <div class="mb-4">

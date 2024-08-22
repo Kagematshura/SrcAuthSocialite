@@ -42,4 +42,9 @@ return [
     'redirect' => 'http://127.0.0.1:8000/auth/google/callback',
     ],
 
+    // 'recaptcha' => [
+    //     'site_key' => env('RECAPTCHA_SITE_KEY'),
+    //     'secret_key' => env('RECAPTCHA_SECRET_KEY'),
+    // ],
+
 ];

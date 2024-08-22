@@ -10,7 +10,7 @@ class LoginController extends Controller
 {
     public function showLoginForm()
     {
-        return view('welcome'); // Ensure this matches the path of your login view
+        return view('welcome');
     }
 
     public function login(Request $request)
@@ -23,7 +23,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended('dashboard'); // Redirect to your dashboard or preferred route
+            return redirect()->intended('dashboard');
         }
 
         throw ValidationException::withMessages([

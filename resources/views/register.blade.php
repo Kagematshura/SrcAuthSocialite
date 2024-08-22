@@ -35,6 +35,23 @@
                     <input type="password" id="password_confirmation" name="password_confirmation" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline" placeholder="Confirm your password" required>
                 </div>
 
+                <!-- Error Messages -->
+                @if($errors->any())
+                    <div class="text-red-500 list-disc list-inside">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="text-red-500 list-disc list-inside">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
                     Register
                 </button>
