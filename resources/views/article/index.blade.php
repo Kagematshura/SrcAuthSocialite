@@ -38,7 +38,7 @@
 </nav>
 
 <div class="container mx-auto p-8">
-    <h1 class="text-4xl font-bold mb-8 text-[#DAD7CD]">Articles</h1> <!-- Timberwolf for the heading -->
+    {{-- <h1 class="text-4xl font-bold mb-8 text-[#DAD7CD]">Articles</h1> <!-- Timberwolf for the heading --> --}}
 
     <!-- Filters and Sorting -->
     <div class="flex justify-between items-center mb-4">
@@ -89,7 +89,7 @@
                             {{ \Illuminate\Support\Str::limit(strip_tags($article->content), 100, '...') }}
                         </td>
                         <td class="py-4 px-6 text-gray-700">
-                            {{ auth()->user()->name ?? 'Unknown' }}
+                            {{ $article->user->name ?? 'Unknown' }}
                         </td>
                         <td class="py-4 px-6 text-gray-700">
                             {{ $article->created_at->timezone('Asia/Jakarta')->format('F d, Y h:i:s A') }}
