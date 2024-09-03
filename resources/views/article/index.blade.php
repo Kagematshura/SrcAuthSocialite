@@ -63,55 +63,56 @@
         </div>
     </div>
 
-    {{-- table --}}
-    <div class="overflow-x-auto bg-[#2C4A37] p-4 rounded-lg shadow-lg">
-        <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-            <thead>
-                <tr class="border-b border-gray-200 bg-[#3A5A40] text-[#DAD7CD]"> <!-- Hunter Green for the table header -->
-                    <th class="py-3 px-6 text-left text-sm font-semibold">Title</th>
-                    <th class="py-3 px-6 text-left text-sm font-semibold">Snippet</th>
-                    <th class="py-3 px-6 text-left text-sm font-semibold">Published By</th>
-                    <th class="py-3 px-6 text-left text-sm font-semibold">Published On</th>
-                    <th class="py-3 px-6 text-left text-sm font-semibold">Last Updated</th>
-                    <th class="py-3 px-6 text-center" colspan="2"></th>
+    {{-- Table --}}
+<div class="overflow-x-auto bg-[#2C4A37] p-4 rounded-lg shadow-lg">
+    <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <thead>
+            <tr class="border-b border-gray-200 bg-[#3A5A40] text-[#DAD7CD]"> <!-- Header styling -->
+                <th class="py-3 px-6 text-left text-sm font-semibold">Title</th>
+                <th class="py-3 px-6 text-left text-sm font-semibold">Snippet</th>
+                <th class="py-3 px-6 text-left text-sm font-semibold">Published By</th>
+                <th class="py-3 px-6 text-left text-sm font-semibold">Published On</th>
+                <th class="py-3 px-6 text-left text-sm font-semibold">Last Updated</th>
+                <th class="py-3 px-6 text-center" colspan="2"></th>
+            </tr>
+        </thead>
+        {{-- Table body --}}
+        <tbody id="articleTable">
+            @foreach ($t_article as $article)
+                <tr class="border-b border-gray-200 hover:bg-[#3A5A40] transition duration-200"> <!-- Row styling -->
+                    <td class="py-4 px-6 text-gray-900">
+                        <a href="{{ route('article.show', $article->id) }}" class="text-[#588157] hover:text-[#DAD7CD] font-semibold">
+                            {{ $article->title }}
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-gray-700">
+                        {{ \Illuminate\Support\Str::limit(strip_tags($article->content), 50, '...') }}
+                    </td>
+                    <td class="py-4 px-6 text-gray-700">
+                        {{ $article->user->name ?? 'Unknown' }} <!-- Display user's name -->
+                    </td>
+                    <td class="py-4 px-6 text-gray-700">
+                        {{ $article->created_at->timezone('Asia/Jakarta')->format('F d, Y h:i:s A') }}
+                    </td>
+                    <td class="py-4 px-6 text-gray-700">
+                        {{ $article->updated_at->timezone('Asia/Jakarta')->format('F d, Y h:i:s A') }}
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <a href="{{ route('article.edit', $article->id) }}" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#3A5A40] transition duration-200">Edit</a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <form action="{{ route('article.destroy', $article->id) }}" method="POST" class="inline-block">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-[#2C4A37] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200" onclick="return confirm('Are you sure you want to delete this article?')">Delete</button>
+                        </form>
+                    </td>
                 </tr>
-            </thead>
-            {{-- table body --}}
-            <tbody id="articleTable">
-                @foreach ($t_article as $article)
-                    <tr class="border-b border-gray-200 hover:bg-[#3A5A40] transition duration-200"> <!-- Hunter Green for row hover effect -->
-                        <td class="py-4 px-6 text-gray-900">
-                            <a href="{{ route('article.show', $article->id) }}" class="text-[#588157] hover:text-[#DAD7CD] font-semibold"> <!-- Fern Green for the link -->
-                                {{ $article->title }}
-                            </a>
-                        </td>
-                        <td class="py-4 px-6 text-gray-700">
-                            {{ \Illuminate\Support\Str::limit(strip_tags($article->content), 100, '...') }}
-                        </td>
-                        <td class="py-4 px-6 text-gray-700">
-                            {{ $article->user->name ?? 'Unknown' }}
-                        </td>
-                        <td class="py-4 px-6 text-gray-700">
-                            {{ $article->created_at->timezone('Asia/Jakarta')->format('F d, Y h:i:s A') }}
-                        </td>
-                        <td class="py-4 px-6 text-gray-700">
-                            {{ $article->updated_at->timezone('Asia/Jakarta')->format('F d, Y h:i:s A') }}
-                        </td>
-                        <td class="py-4 px-6 text-center">
-                            <a href="{{ route('article.edit', $article->id) }}" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#3A5A40] transition duration-200">Edit</a> <!-- Fern Green for the button -->
-                        </td>
-                        <td class="py-4 px-6 text-center">
-                            <form action="{{ route('article.destroy', $article->id) }}" method="POST" class="inline-block">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="bg-[#2C4A37] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200" onclick="return confirm('Are you sure you want to delete this article?')">Delete</button> <!-- Darker Green for the button -->
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
 
     {{-- create article button --}}
     <div class="mt-8">

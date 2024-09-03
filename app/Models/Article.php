@@ -9,7 +9,13 @@ class Article extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['title', 'content', 'user_id']; // Make sure 'user_id' is included
 
-    protected $fillable = ['title', 'content'];
-    protected $table = 't_article';
+    protected $table = 't_article'; // Table name if not default
+
+    // Define the relationship to User
+    public function user()
+    {
+        return $this->belongsTo(User::class); // Each article belongs to one user
+    }
 }

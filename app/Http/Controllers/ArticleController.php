@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; // Import Auth to get the current user
 
 class ArticleController extends Controller
 {
     public function index()
     {
-        $t_article = Article::all();
+        // Eager load the user relationship to avoid N+1 query problem
+        $t_article = Article::with('user')->get();
         return view('article.index', compact('t_article'));
     }
 
@@ -25,7 +27,12 @@ class ArticleController extends Controller
             'content' => 'required',
         ]);
 
-        Article::create($request->all());
+        // Create a new article with the current user's ID
+        Article::create([
+            'title' => $request->input('title'),
+            'content' => $request->input('content'),
+            'user_id' => Auth::id(), // Set the user_id to the currently authenticated user's ID
+        ]);
 
         return redirect()->route('article.index')->with('success', 'Article created successfully.');
     }
