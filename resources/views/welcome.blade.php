@@ -11,7 +11,7 @@
         <div class="w-full max-w-md px-6 py-12 bg-[#3A5A40] rounded-lg shadow-lg"> <!-- Hunter Green for the container -->
             <div class="text-center mb-6">
                 <!-- Logo -->
-                <img src="https://www.grahadhuafa.org/website/assets/images/custom/logo_gdi_long.png" alt="Logo" class="mx-auto mb-4"> <!-- Placeholder for the logo -->
+                <img src="https://www.grahadhuafa.org/website/assets/images/custom/logo_gdi_long.png" alt="Logo" class="mx-auto mb-6"> <!-- Placeholder for the logo -->
                 <h2 class="text-3xl font-bold text-[#DAD7CD] mb-2">Sign in to your account</h2> <!-- Timberwolf for the heading text -->
             </div>
 
