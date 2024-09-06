@@ -136,6 +136,11 @@
                 </table>
             </div>
 
+            {{-- Pagination Links --}}
+            <div class="mt-8">
+                {{ $t_article->links('pagination::tailwind') }}
+            </div>
+
             {{-- create article button --}}
             <div class="mt-8">
                 <a href="{{ route('article.create') }}" class="bg-[#588157] text-white px-6 py-2 rounded-lg shadow-lg hover:bg-[#3A5A40] transition duration-200">

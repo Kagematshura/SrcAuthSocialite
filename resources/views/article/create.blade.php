@@ -14,24 +14,30 @@
         </div>
     @endif
 
-    <form action="{{ route('article.store') }}" method="POST" class="bg-white p-8 rounded-lg shadow-md" onsubmit="handleSubmit()">
+    <form action="{{ route('article.store') }}" method="POST" class="bg-white p-8 rounded-lg shadow-md" enctype="multipart/form-data" onsubmit="handleSubmit()">
         @csrf
         <div class="mb-6">
             <label class="block text-gray-700 text-lg font-semibold mb-2" for="title">Title</label>
             <input type="text" name="title" id="title" placeholder="Enter your article title here..." class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring focus:ring-red-200" required oninput="updateTitleCounter()">
             <div id="title-counter" class="text-sm text-gray-500 mt-1">Character count: 0</div>
         </div>
+
         <div class="mb-6">
-    <label class="block text-gray-700 text-lg font-semibold mb-2" for="content">Content</label>
-    <textarea
-        name="content"
-        id="content"
-        rows="10"
-        class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring focus:ring-red-200"
-        placeholder="Write your article content here..."
-        required>{{ isset($article) ? $article->content : '' }}</textarea>
-    <div id="content-counter" class="text-sm text-gray-500 mt-1">Word count: 0</div>
-</div>
+            <label class="block text-gray-700 text-lg font-semibold mb-2" for="image">Article Image</label>
+            <input type="file" name="image" id="image" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring focus:ring-red-200">
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 text-lg font-semibold mb-2" for="content">Content</label>
+            <textarea
+                name="content"
+                id="content"
+                rows="10"
+                class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring focus:ring-red-200"
+                placeholder="Write your article content here..."
+                required>{{ isset($article) ? $article->content : '' }}</textarea>
+            <div id="content-counter" class="text-sm text-gray-500 mt-1">Word count: 0</div>
+        </div>
 
 <button type="submit" class="bg-red-600 text-white px-6 py-3 rounded-lg shadow hover:bg-red-700 transition duration-300">
     {{ isset($article) ? 'Update' : 'Submit' }}

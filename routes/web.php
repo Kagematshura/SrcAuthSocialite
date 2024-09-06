@@ -6,6 +6,7 @@ use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\DraftController;
 
 // Home route
 Route::get('/', function () {
@@ -30,6 +31,9 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+// Home
+Route::get('/home', [ArticleController::class, 'home'])->name('article.home');
+
 // Article Routes
 Route::get('/article', [ArticleController::class, 'index'])->name('article.index');
 Route::get('/article/create', [ArticleController::class, 'create'])->name('article.create');
@@ -44,3 +48,9 @@ Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->nam
 
 // Show Single Article
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('article.show');
+
+// Drafts
+Route::get('/drafts/create', [DraftController::class, 'create'])->name('drafts.create');
+Route::post('/drafts/store', [DraftController::class, 'store'])->name('drafts.store');
+Route::get('/drafts', [DraftController::class, 'index'])->name('drafts.index');
+Route::post('/drafts/{id}/approve', [DraftController::class, 'approve'])->name('drafts.approve');

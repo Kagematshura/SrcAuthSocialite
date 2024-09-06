@@ -6,24 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
-        Schema::create('t_article', function (Blueprint $table) {
+        Schema::create('drafts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('content');
-            $table->timestamps();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->timestamps(); // This automatically adds 'created_at' and 'updated_at'
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('t_article');
+        Schema::dropIfExists('drafts');
     }
 };
