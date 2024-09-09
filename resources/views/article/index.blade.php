@@ -2,67 +2,64 @@
 
 @section('content')
 <!-- Sidebar and Content Wrapper -->
-<div class="flex min-h-screen bg-[#3A5A40]">
-    <!-- Sidebar -->
-    <aside id="sidebar" class="bg-[#3A5A40] w-64 space-y-6 px-4 py-4 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out shadow-lg z-30">
-        <!-- Logo -->
-        <div class="text-[#DAD7CD] text-2xl font-bold">My App</div>
-
-        <!-- Menu Links -->
-        <nav class="mt-8">
-            <ul class="space-y-2">
-                <li>
-                    <a href="#" class="block py-2 px-4 rounded-lg bg-[#2C4A37] hover:bg-[#588157] text-[#DAD7CD] hover:text-white transition duration-200">Home</a>
-                </li>
-                <li>
-                    <a href="#" class="block py-2 px-4 rounded-lg bg-[#2C4A37] hover:bg-[#588157] text-[#DAD7CD] hover:text-white transition duration-200">Articles</a>
-                </li>
-                <li>
-                    <a href="#" class="block py-2 px-4 rounded-lg bg-[#2C4A37] hover:bg-[#588157] text-[#DAD7CD] hover:text-white transition duration-200">Contact</a>
-                </li>
-            </ul>
-        </nav>
-
-        <!-- Profile Dropdown -->
-        <div class="mt-10">
-            <button id="dropdownButton" class="flex items-center justify-between w-full text-[#DAD7CD] hover:text-white focus:outline-none py-2 px-4 rounded-lg bg-[#2C4A37] hover:bg-[#588157] transition duration-200">
-                <div class="flex items-center space-x-2">
+<div class="flex min-h-screen">
+        <div class="sidebar">
+          <div class="logo_details">
+            <i>
+                <img src="" alt="">
+            </i>
+            <div class="logo_name">Laz GDI</div>
+            <i class="bx bx-menu" id="btn"></i>
+          </div>
+          <ul class="nav-list">
+            <li>
+              <a href="#">
+                <i class="bx bx-grid-alt"></i>
+                <span class="link_name">Dashboard</span>
+              </a>
+              <span class="tooltip">Dashboard</span>
+            </li>
+            <li>
+              <a href="#">
+                <i class="bx bx-user"></i>
+                <span class="link_name">User</span>
+              </a>
+              <span class="tooltip">User</span>
+            </li>
+            <li>
+              <a href="#">
+                <i class="bx bx-chat"></i>
+                <span class="link_name">Message</span>
+              </a>
+              <span class="tooltip">Message</span>
+            </li>
+            <li>
+              <a href="#">
+                <i class="bx bx-cog"></i>
+                <span class="link_name">Settings</span>
+              </a>
+              <span class="tooltip">Settings</span>
+            </li>
+            <li class="profile">
+                <div class="profile_details">
+                  <div class="flex items-center space-x-2">
                     <img src="{{ auth()->user()->profile_picture_url ?? 'https://via.placeholder.com/40' }}" class="w-10 h-10 rounded-full" alt="Profile Picture">
                     <span>{{ auth()->user()->name ?? 'Guest' }}</span>
+                  </div>
                 </div>
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-            </button>
-
-            <!-- Dropdown Menu -->
-            <div id="dropdownMenu" class="hidden mt-2 bg-[#3A5A40] rounded-lg shadow-lg py-2 z-20">
-                <a href="#" class="block px-4 py-2 text-[#DAD7CD] hover:bg-[#2C4A37] transition duration-200">Profile</a>
-                <a href="#" class="block px-4 py-2 text-[#DAD7CD] hover:bg-[#2C4A37] transition duration-200">Settings</a>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="w-full text-left px-4 py-2 text-[#DAD7CD] hover:bg-[#2C4A37] transition duration-200">Logout</button>
+                <form action="{{ route('logout') }}" method="POST" class="inline-block">
+                  @csrf
+                  <button type="submit" id="log_out" class="bg-[#2C4A37] text-white w-full h-12 flex items-center justify-center rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200">
+                    <i class="bx bx-log-out"></i>
+                  </button>
                 </form>
-            </div>
-        </div>
-    </aside>
+              </li>
 
-    <!-- Content Area -->
-    <div class="flex-1 flex flex-col">
-        <!-- Header with Sidebar Toggle Button -->
-        <header class="bg-[#3A5A40] text-[#DAD7CD] p-4 shadow-md md:hidden">
-            <div class="flex justify-between items-center">
-                <button id="toggleSidebar" class="text-[#DAD7CD] focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                    </svg>
-                </button>
-                <div class="text-2xl font-bold">My App</div>
-            </div>
-        </header>
+          </ul>
+        </div>
 
         {{-- Your content goes here --}}
-        <main class="flex-1 p-8">
+        <section class="home-section flex-1 p-8">
             <!-- Filters and Sorting -->
             <div class="flex justify-between items-center mb-4">
                 <!-- Title Filter -->
@@ -147,21 +144,33 @@
                     Create New Article
                 </a>
             </div>
-        </main>
+        </section>
     </div>
-</div>
 
 <script>
-    // JavaScript for Sidebar and Dropdown
-    document.getElementById('toggleSidebar').addEventListener('click', function() {
-        var sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('-translate-x-full');
-    });
+    window.onload = function(){
+    const sidebar = document.querySelector(".sidebar");
+    const closeBtn = document.querySelector("#btn");
+    const searchBtn = document.querySelector(".bx-search")
 
-    document.getElementById('dropdownButton').addEventListener('click', function() {
-        var dropdownMenu = document.getElementById('dropdownMenu');
-        dropdownMenu.classList.toggle('hidden');
-    });
+    closeBtn.addEventListener("click",function(){
+        sidebar.classList.toggle("open")
+        menuBtnChange()
+    })
+
+    searchBtn.addEventListener("click",function(){
+        sidebar.classList.toggle("open")
+        menuBtnChange()
+    })
+
+    function menuBtnChange(){
+        if(sidebar.classList.contains("open")){
+            closeBtn.classList.replace("bx-menu","bx-menu-alt-right")
+        }else{
+            closeBtn.classList.replace("bx-menu-alt-right","bx-menu")
+        }
+    }
+}
 
     function applyTitleFilter() {
         var titleFilter = document.getElementById('titleFilter').value.toLowerCase();
@@ -205,4 +214,306 @@
         sortArticles();
     }
 </script>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+    :root {
+    --color-default: #2C4A37;  /* Dark green */
+    --color-second: #588157;  /* Fern green */
+    --color-white: #DAD7CD;   /* Light cream */
+    --color-body: #3A5A40;    /* Darker green for the body background */
+    --color-light: #D9EAD3;   /* Light green */
+}
+
+
+  *{
+    padding: 0%;
+    margin: 0%;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body{
+    min-height: 100vh;
+  }
+
+  .sidebar{
+    min-height: 100vh;
+    width: 78px;
+    padding: 6px 14px;
+    z-index: 99;
+    background-color: var(--color-default);
+    transition: all .5s ease;
+    position: fixed;
+    top:0;
+    left: 0;
+  }
+
+  .sidebar.open{
+    width: 250px;
+  }
+
+  .sidebar .logo_details{
+    height: 60px;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .sidebar .logo_details .icon{
+    opacity: 0;
+    transition: all 0.5s ease ;
+  }
+
+  .sidebar .logo_details .logo_name{
+    color:var(--color-white);
+    font-size: 22px;
+    font-weight: 600;
+    opacity: 0;
+    transition: all .5s ease;
+  }
+
+  .sidebar.open .logo_details .icon,
+  .sidebar.open .logo_details .logo_name{
+    opacity: 1;
+  }
+
+  .sidebar .logo_details #btn{
+    position: absolute;
+    top:50%;
+    right: 0;
+    transform: translateY(-50%);
+    font-size: 23px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .5s ease;
+  }
+
+  .sidebar.open .logo_details #btn{
+    text-align: right;
+  }
+
+  .sidebar i{
+    color:var(--color-white);
+    height: 60px;
+    line-height: 60px;
+    min-width: 50px;
+    font-size: 25px;
+    text-align: center;
+  }
+
+  .sidebar .nav-list{
+    margin-top: 20px;
+    height: 100%;
+  }
+
+  .sidebar li{
+    position: relative;
+    margin:8px 0;
+    list-style: none;
+  }
+
+  .sidebar li .tooltip{
+    position: absolute;
+    top:-20px;
+    left:calc(100% + 15px);
+    z-index: 3;
+    background-color: var(--color-white);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    padding: 6px 14px;
+    font-size: 15px;
+    font-weight: 400;
+    border-radius: 5px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sidebar li:hover .tooltip{
+    opacity: 1;
+    pointer-events: auto;
+    transition: all 0.4s ease;
+    top:50%;
+    transform: translateY(-50%);
+  }
+
+  .sidebar.open li .tooltip{
+    display: none;
+  }
+
+  .sidebar input{
+    font-size: 15px;
+    color: var(--color-white);
+    font-weight: 400;
+    outline: none;
+    height: 35px;
+    width: 35px;
+    border:none;
+    border-radius: 5px;
+    background-color: var(--color-second);
+    transition: all .5s ease;
+  }
+
+  .sidebar input::placeholder{
+    color:var(--color-light)
+  }
+
+  .sidebar.open input{
+    width: 100%;
+    padding: 0 20px 0 50px;
+  }
+
+  .sidebar .bx-search{
+    position: absolute;
+    top:50%;
+    left:0;
+    transform: translateY(-50%);
+    font-size: 22px;
+    background-color: var(--color-second);
+    color: var(--color-white);
+  }
+
+  .sidebar li a{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    text-decoration: none;
+    background-color: var(--color-default);
+    position: relative;
+    transition: all .5s ease;
+    z-index: 12;
+  }
+
+  .sidebar li a::after{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: scaleX(0);
+    background-color: var(--color-white);
+    border-radius: 5px;
+    transition: transform 0.3s ease-in-out;
+    transform-origin: left;
+    z-index: -2;
+  }
+
+  .sidebar li a:hover::after{
+    transform: scaleX(1);
+    color:var(--color-default)
+  }
+
+  .sidebar li a .link_name{
+    color:var(--color-white);
+    font-size: 15px;
+    font-weight: 400;
+    white-space: nowrap;
+    pointer-events: auto;
+    transition: all 0.4s ease;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .sidebar li a:hover .link_name,
+  .sidebar li a:hover i{
+    transition: all 0.5s ease;
+    color:var(--color-default)
+  }
+
+  .sidebar.open li a .link_name{
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sidebar li i{
+    height: 35px;
+    line-height: 35px;
+    font-size: 18px;
+    border-radius: 5px;
+  }
+
+  .sidebar li.profile{
+    position: fixed;
+    height: 60px;
+    width: 78px;
+    left: 0;
+    bottom:-8px;
+    padding:10px 14px;
+    overflow: hidden;
+    transition: all .5s ease;
+  }
+
+  .sidebar.open li.profile{
+    width: 250px;
+  }
+
+  .sidebar .profile .profile_details{
+    display: flex;
+    align-items: center;
+    flex-wrap:  nowrap;
+  }
+
+  .sidebar li img{
+    height: 45px;
+    width: 45px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .sidebar li.profile .name,
+  .sidebar li.profile .designation{
+    font-size: 15px;
+    font-weight: 400;
+    color:var(--color-white);
+    white-space: nowrap;
+  }
+
+  .sidebar li.profile .designation{
+    font-size: 12px;
+  }
+
+  .sidebar .profile #log_out{
+    position: absolute;
+    top:50%;
+    right: 0;
+    transform: translateY(-50%);
+    background-color: var(--color-second);
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+  }
+
+  .sidebar.open .profile #log_out{
+    width: 50px;
+    background: none;
+  }
+
+  .home-section{
+    position: relative;
+    background-color: var(--color-body);
+    min-height: 100vh;
+    top:0;
+    left:78px;
+    width: calc(100% - 78px);
+    transition: all .5s ease;
+    z-index: 2;
+  }
+
+  .home-section .text{
+    display: inline-block;
+    color:var(--color-default);
+    font-size: 25px;
+    font-weight: 500;
+    margin: 18px;
+  }
+
+  .sidebar.open ~ .home-section{
+    left:250px;
+    width: calc(100% - 250px);
+  }
+  </style>
 @endsection
