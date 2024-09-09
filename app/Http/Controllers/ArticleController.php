@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use Illuminate\Contracts\Support\ValidatedData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // Import Auth to get the current user
 use Illuminate\Support\Facades\Storage;
@@ -34,9 +35,10 @@ class ArticleController extends Controller
         'content' => 'required',
     ]);
 
-    $article = new Article;
-    $article->title = $request->title;
-    $article->content = $request->content;
+        $article = new Article;
+        $article->title = $request->title;
+        $article->content = $request->content;
+        $article->user_id = Auth::id();
 
     if ($request->hasFile('image')) {
         $imagePath = $request->file('image')->store('articles', 'public');
@@ -48,8 +50,8 @@ class ArticleController extends Controller
     return redirect()->route('article.index')->with('success', 'Article created successfully!');
 }
 
-public function update(Request $request, $id)
-{
+    public function update(Request $request, $id)
+    {
     $request->validate([
         'title' => 'required|string|max:255',
         'content' => 'required|string',
@@ -86,7 +88,7 @@ public function update(Request $request, $id)
     }
     public function show($id)
     {
-        $article = Article::findOrFail($id);
+       $article = Article::with('user')->findOrFail($id);
         $nextArticle = Article::where('id', '>', $id)->orderBy('id')->first();
         $previousArticle = Article::where('id', '<', $id)->orderBy('id', 'desc')->first();
 

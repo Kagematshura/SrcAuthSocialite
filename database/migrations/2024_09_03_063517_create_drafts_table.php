@@ -12,7 +12,6 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
-            $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps(); // This automatically adds 'created_at' and 'updated_at'
         });
     }
