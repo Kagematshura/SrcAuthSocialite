@@ -34,7 +34,7 @@
         </div>
 
         <!-- Edit Profile Modal -->
-        <div x-show="open" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        {{-- <div x-show="open" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-[#2E3A24] p-6 rounded-lg shadow-lg w-full max-w-md">
                 <h2 class="text-2xl font-semibold text-[#DAD7CD]">Edit Profile</h2>
                 <form action="{{ route('profile.update') }}" method="POST" class="mt-4">
@@ -58,7 +58,7 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Tabs -->
         <div class="flex justify-center space-x-4 mt-8">
