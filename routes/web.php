@@ -7,6 +7,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\DraftController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingsController;
 
 // Home route
 Route::get('/', function () {
@@ -54,3 +56,9 @@ Route::get('/drafts/create', [DraftController::class, 'create'])->name('drafts.c
 Route::post('/drafts/store', [DraftController::class, 'store'])->name('drafts.store');
 Route::get('/drafts', [DraftController::class, 'index'])->name('drafts.index');
 Route::post('/drafts/{id}/approve', [DraftController::class, 'approve'])->name('drafts.approve');
+
+//Profile
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+
+//Settings
+Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');

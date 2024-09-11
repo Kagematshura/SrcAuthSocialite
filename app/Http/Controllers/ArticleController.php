@@ -5,19 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Contracts\Support\ValidatedData;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Import Auth to get the current user
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
     public function index()
     {
-        // Eager load the user relationship to avoid N+1 query problem
         $t_article = Article::with('user')->get();
 
         $query = Article::query();
         // Paginate the result
-        $t_article = $query->paginate(6);
+        $t_article = Article::with('user')->paginate(6);
 
         return view('article.index', compact('t_article'));
     }
@@ -35,20 +34,18 @@ class ArticleController extends Controller
         'content' => 'required',
     ]);
 
-        $article = new Article;
-        $article->title = $request->title;
-        $article->content = $request->content;
-        $article->user_id = Auth::id();
+    $imagePath = $request->hasFile('image') ? $request->file('image')->store('articles', 'public') : null;
 
-    if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('articles', 'public');
-        $article->image_path = $imagePath;
-    }
-
-    $article->save();
+    Article::create([
+        'title' => $request->title,
+        'content' => $request->content,
+        'user_id' => Auth::id(),
+        'image_path' => $imagePath,
+    ]);
 
     return redirect()->route('article.index')->with('success', 'Article created successfully!');
 }
+
 
     public function update(Request $request, $id)
     {

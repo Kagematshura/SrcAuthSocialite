@@ -217,11 +217,11 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
     :root {
-    --color-default: #2C4A37;  /* Dark green */
-    --color-second: #588157;  /* Fern green */
-    --color-white: #DAD7CD;   /* Light cream */
-    --color-body: #3A5A40;    /* Darker green for the body background */
-    --color-light: #D9EAD3;   /* Light green */
+    --color-default: #2C4A37; 
+    --color-second: #588157;
+    --color-white: #DAD7CD;
+    --color-body: #3A5A40;
+    --color-light: #D9EAD3;
 }
   *{
     padding: 0%;
