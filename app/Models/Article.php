@@ -9,7 +9,7 @@ class Article extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'content', 'user_id']; // Make sure 'user_id' is included
+    protected $fillable = ['title', 'content', 'user_id', 'profile_picture']; // Make sure 'user_id' is included
 
     protected $table = 't_article'; // Table name if not default
 

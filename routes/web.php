@@ -58,7 +58,7 @@ Route::get('/drafts', [DraftController::class, 'index'])->name('drafts.index');
 Route::post('/drafts/{id}/approve', [DraftController::class, 'approve'])->name('drafts.approve');
 
 //Profile
-Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-
-//Settings
-Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});

@@ -20,7 +20,7 @@
               <span class="tooltip">Dashboard</span>
             </li>
             <li>
-              <a href="#">
+              <a href="{{route('profile.index')}}">
                 <i class="bx bx-user"></i>
                 <span class="link_name">User</span>
               </a>
@@ -34,6 +34,13 @@
               <span class="tooltip">Message</span>
             </li>
             <li>
+                <a href="#">
+                <i class='bx bx-notification'></i>
+                  <span class="link_name">Notification</span>
+                </a>
+                <span class="tooltip">Notification</span>
+              </li>
+            <li>
               <a href="#">
                 <i class="bx bx-cog"></i>
                 <span class="link_name">Settings</span>
@@ -43,8 +50,9 @@
             <li class="profile">
                 <div class="profile_details">
                   <div class="flex items-center space-x-2">
-                    <img src="{{ auth()->user()->profile_picture_url ?? 'https://via.placeholder.com/40' }}" class="w-10 h-10 rounded-full" alt="Profile Picture">
-                    <span>{{ auth()->user()->name ?? 'Guest' }}</span>
+                    <img src="{{ asset('storage/' . Auth::user()->profile_picture) ?? 'https://i.pinimg.com/236x/ad/73/1c/ad731cd0da0641bb16090f25778ef0fd.jpg' }}"
+                    class="w-10 h-10 rounded-full">
+                    <span>{{ Str::limit(strip_tags(auth()->user()->name), 15, '...') ?? 'Guest' }}</span>
                   </div>
                 </div>
                 <form action="{{ route('logout') }}" method="POST" class="inline-block">
@@ -108,8 +116,10 @@
                                 <td class="py-4 px-4 text-gray-700">
                                     {{ \Illuminate\Support\Str::limit(strip_tags($article->content), 50, '...') }}
                                 </td>
-                                <td class="py-4 px-4 text-gray-700">
-                                    {{ $article->user->name ?? 'Unknown' }}
+                                <td class="flex flex-row py-4 px-4 text-gray-700 justify-center">
+                                    <img src="{{ asset('storage/' . Auth::user()->profile_picture) ?? 'https://i.pinimg.com/236x/ad/73/1c/ad731cd0da0641bb16090f25778ef0fd.jpg' }}"
+                                    style="width: 25px; height: 25px;" class="rounded-full object-cover" alt="Profile Picture">
+                                    <p class="pl-4">{{ $article->user->name ?? 'Unknown' }}</p>
                                 </td>
                                 <td class="py-4 px-4 text-gray-700">
                                     {{ $article->created_at->timezone('Asia/Jakarta')->format('F j, Y g:i A')  }}
@@ -217,7 +227,7 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
     :root {
-    --color-default: #2C4A37; 
+    --color-default: #2C4A37;
     --color-second: #588157;
     --color-white: #DAD7CD;
     --color-body: #3A5A40;
