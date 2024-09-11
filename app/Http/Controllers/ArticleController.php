@@ -17,7 +17,7 @@ class ArticleController extends Controller
 
         $query = Article::query();
         // Paginate the result
-        $t_article = $query->paginate(5); //pagination my ass
+        $t_article = $query->paginate(6);
 
         return view('article.index', compact('t_article'));
     }

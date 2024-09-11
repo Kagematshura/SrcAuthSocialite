@@ -14,7 +14,6 @@
 
     <div class="">
         @yield('content')
-        @yield('sidebar')
     </div>
 
 </body>
