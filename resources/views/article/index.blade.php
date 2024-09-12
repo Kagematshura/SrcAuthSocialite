@@ -52,7 +52,7 @@
                   <div class="flex items-center space-x-2">
                     <img src="{{ asset('storage/' . Auth::user()->profile_picture) ?? 'https://i.pinimg.com/236x/ad/73/1c/ad731cd0da0641bb16090f25778ef0fd.jpg' }}"
                     class="w-10 h-10 rounded-full">
-                    <span>{{ Str::limit(strip_tags(auth()->user()->name), 15, '...') ?? 'Guest' }}</span>
+                    <span class="text-[#DAD7CD]">{{ Str::limit(strip_tags(auth()->user()->name), 15, '...') ?? 'Guest' }}</span>
                   </div>
                 </div>
                 <form action="{{ route('logout') }}" method="POST" class="inline-block">
@@ -116,10 +116,10 @@
                                 <td class="py-4 px-4 text-gray-700">
                                     {{ \Illuminate\Support\Str::limit(strip_tags($article->content), 50, '...') }}
                                 </td>
-                                <td class="flex flex-row py-4 px-4 text-gray-700 justify-center">
-                                    <img src="{{ asset('storage/' . Auth::user()->profile_picture) ?? 'https://i.pinimg.com/236x/ad/73/1c/ad731cd0da0641bb16090f25778ef0fd.jpg' }}"
+                                <td class="flex flex-row py-4 px-4 text-gray-700">
+                                    <img src="{{ asset('storage/' . $article->user->profile_picture) ?? 'https://i.pinimg.com/236x/ad/73/1c/ad731cd0da0641bb16090f25778ef0fd.jpg' }}"
                                     style="width: 25px; height: 25px;" class="rounded-full object-cover" alt="Profile Picture">
-                                    <p class="pl-4">{{ $article->user->name ?? 'Unknown' }}</p>
+                                    <p class="pl-4">{{ Str::limit(strip_tags($article->user->name), 15, '...') ?? 'Guest' }}</p>
                                 </td>
                                 <td class="py-4 px-4 text-gray-700">
                                     {{ $article->created_at->timezone('Asia/Jakarta')->format('F j, Y g:i A')  }}

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\User;
 use Illuminate\Contracts\Support\ValidatedData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -85,7 +86,7 @@ class ArticleController extends Controller
     }
     public function show($id)
     {
-       $article = Article::with('user')->findOrFail($id);
+        $article = Article::with('user')->findOrFail($id);
         $nextArticle = Article::where('id', '>', $id)->orderBy('id')->first();
         $previousArticle = Article::where('id', '<', $id)->orderBy('id', 'desc')->first();
 
