@@ -24,6 +24,19 @@
             <div id="title-counter" class="text-sm text-gray-500 mt-1">Character count: {{ strlen($article->title) }}</div>
         </div>
 
+        <!-- Category Dropdown -->
+        <div class="mb-6">
+        <label class="block text-gray-700 text-lg font-semibold mb-2" for="category">Category</label>
+        <select name="category" id="category" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring focus:ring-red-200" required>
+            <option value="" disabled>Select a category</option>
+            <option value="technology" {{ $article->category == 'technology' ? 'selected' : '' }}>Technology</option>
+            <option value="science" {{ $article->category == 'science' ? 'selected' : '' }}>Science</option>
+            <option value="health" {{ $article->category == 'health' ? 'selected' : '' }}>Health</option>
+            <option value="sports" {{ $article->category == 'sports' ? 'selected' : '' }}>Sports</option>
+            <option value="entertainment" {{ $article->category == 'entertainment' ? 'selected' : '' }}>Entertainment</option>
+        </select>
+        </div>
+
         <!-- Image Upload Section -->
         <div class="mb-6">
             <label class="block text-gray-700 text-lg font-semibold mb-2" for="image">Article Image</label>
@@ -42,9 +55,12 @@
                 rows="10"
                 class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring focus:ring-red-200"
                 placeholder="Write your article content here..."
-                required>{{ $article->content }}</textarea>
+                required>{{ old('content', $article->content) }}</textarea>
             <div id="content-counter" class="text-sm text-gray-500 mt-1">Word count: 0</div>
         </div>
+
+         <!-- Status -->
+         <input type="hidden" name="sts" value="{{ old('sts', $article->sts) }}">
 
         <button type="submit" class="bg-red-600 text-white px-6 py-3 rounded-lg shadow hover:bg-red-700 transition duration-300">
             Update Article

@@ -3,6 +3,9 @@
 @section('content')
 <div class="bg-[#344E41] text-white min-h-screen flex items-center justify-center">
     <div class="w-full max-w-xl">
+        <a href="{{route('article.index')}}">
+            <i class='bx bx-arrow-back text-2xl'></i>
+        </a>
         <!-- Profile Section -->
         <div class="flex flex-col items-center">
             <img src="{{ asset('storage/' . Auth::user()->profile_picture) ?? 'https://i.pinimg.com/236x/ad/73/1c/ad731cd0da0641bb16090f25778ef0fd.jpg' }}"

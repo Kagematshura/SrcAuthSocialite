@@ -55,7 +55,10 @@ Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('art
 Route::get('/drafts/create', [DraftController::class, 'create'])->name('drafts.create');
 Route::post('/drafts/store', [DraftController::class, 'store'])->name('drafts.store');
 Route::get('/drafts', [DraftController::class, 'index'])->name('drafts.index');
+Route::get('/drafts/{id}', [DraftController::class, 'show'])->name('drafts.show');
 Route::post('/drafts/{id}/approve', [DraftController::class, 'approve'])->name('drafts.approve');
+Route::post('/drafts/{id}/pending', [DraftController::class, 'setPending'])->name('drafts.pending');
+Route::post('/drafts/{id}/notapproved', [DraftController::class, 'notApproved'])->name('drafts.notapproved');
 
 //Profile
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');

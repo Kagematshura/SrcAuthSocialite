@@ -9,9 +9,9 @@ class Article extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'content', 'user_id', 'profile_picture']; // Make sure 'user_id' is included
+    protected $fillable = ['title', 'content', 'user_id', 'profile_picture', 'category','sts']; // Make sure 'user_id' is included
 
-    protected $table = 't_article'; // Table name if not default
+    protected $table = 't_post'; // Table name if not default
 
     // Define the relationship to User
     public function user()

@@ -9,6 +9,6 @@ class Draft extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title', 'content', 'user_id',
+        'title', 'content', 'user_id', 'type',
     ];
 }

@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('t_article', function (Blueprint $table) {
+        Schema::create('t_post', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Foreign key for user
             $table->text('content');
+            $table->string('category')->nullable();
+            $table->string('sts')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Foreign key for user
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('t_article');
+        Schema::dropIfExists('t_post');
     }
 };

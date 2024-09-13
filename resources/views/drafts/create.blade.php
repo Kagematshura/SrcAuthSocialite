@@ -20,7 +20,6 @@
     </div>
     @endif
 
-
     <form action="{{ route('drafts.store') }}" method="POST" class="space-y-4">
         @csrf
 
@@ -34,6 +33,13 @@
             <textarea name="content" id="content" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required></textarea>
         </div>
 
+        <div class="form-group">
+            <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+            <select name="type" id="type" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                <option value="article">Article</option>
+                <option value="news">News</option>
+            </select>
+        </div>
         <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save as Draft</button>
     </form>
 

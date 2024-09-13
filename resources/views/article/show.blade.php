@@ -6,7 +6,7 @@
 
     <p class="text-gray-600 text-sm mb-6">
         <span class="block">
-            Written by <span class="font-semibold">{{ $article->user->name ?? 'Unknown' }}</span> <!-- Display the author's name -->
+            Categorized in <span class="font-semibold">{{ ucfirst($article->category) }}</span>
         </span>
         <time datetime="{{ $article->created_at->toIso8601String() }}" class="block">
             Published on <span class="font-semibold">{{ $article->created_at->timezone('Asia/Jakarta')->format('F d, Y h:i:s A') }}</span>

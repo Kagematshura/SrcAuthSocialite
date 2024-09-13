@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mx-auto p-8">
-    <h1 class="text-4xl font-bold mb-8 text-gray-900">Add New Article</h1>
+    <h1 class="text-4xl font-bold mb-8 text-gray-900">Add New Page</h1>
 
     @if ($errors->any())
         <div class="bg-red-600 text-white p-4 rounded-lg shadow-md mb-4">
@@ -18,12 +18,23 @@
         @csrf
         <div class="mb-6">
             <label class="block text-gray-700 text-lg font-semibold mb-2" for="title">Title</label>
-            <input type="text" name="title" id="title" placeholder="Enter your article title here..." class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring focus:ring-red-200" required oninput="updateTitleCounter()">
+            <input type="text" name="title" id="title" placeholder="Enter your title here..." class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring focus:ring-red-200" required oninput="updateTitleCounter()">
             <div id="title-counter" class="text-sm text-gray-500 mt-1">Character count: 0</div>
         </div>
 
+        <!-- Category Dropdown -->
         <div class="mb-6">
-            <label class="block text-gray-700 text-lg font-semibold mb-2" for="image">Article Image</label>
+            <label class="block text-gray-700 text-lg font-semibold mb-2" for="category">Category</label>
+            <select name="category" id="category" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring focus:ring-red-200" required>
+                <option value="" disabled selected>Select a category</option>
+                <option value="technology">Technology</option>
+                <option value="sports">Sports</option>
+                <option value="entertainment">Entertainment</option>
+            </select>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 text-lg font-semibold mb-2" for="image">Image</label>
             <input type="file" name="image" id="image" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring focus:ring-red-200">
         </div>
 
@@ -39,9 +50,12 @@
             <div id="content-counter" class="text-sm text-gray-500 mt-1">Word count: 0</div>
         </div>
 
-<button type="submit" class="bg-red-600 text-white px-6 py-3 rounded-lg shadow hover:bg-red-700 transition duration-300">
-    {{ isset($article) ? 'Update' : 'Submit' }}
-</button>
+        <!-- Status -->
+        <input type="hidden" name="sts" value="{{ $sts }}">
+
+        <button type="submit" class="bg-red-600 text-white px-6 py-3 rounded-lg shadow hover:bg-red-700 transition duration-300">
+            {{ isset($article) ? 'Update' : 'Submit' }}
+        </button>
 
     </form>
 
