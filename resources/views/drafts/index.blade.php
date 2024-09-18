@@ -14,7 +14,6 @@
             <thead class="bg-gray-50">
                 <tr>
                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Title</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Author</th>
                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Type</th>
                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Submitted At</th>
                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Status</th>
@@ -29,7 +28,6 @@
                                 {{ $draft->title }}
                             </a>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $draft->author }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $draft->type }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $draft->created_at->format('M d, Y') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ ucfirst($draft->status) }}</td>

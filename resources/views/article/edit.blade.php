@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mx-auto p-8">
-    <h1 class="text-4xl font-bold mb-8 text-gray-900">Edit Article</h1>
+    <h1 class="text-4xl font-bold mb-8 text-gray-900">Edit Post</h1>
 
     @if ($errors->any())
         <div class="bg-red-600 text-white p-4 rounded-lg shadow-md mb-4">
@@ -26,15 +26,11 @@
 
         <!-- Category Dropdown -->
         <div class="mb-6">
-        <label class="block text-gray-700 text-lg font-semibold mb-2" for="category">Category</label>
-        <select name="category" id="category" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring focus:ring-red-200" required>
-            <option value="" disabled>Select a category</option>
-            <option value="technology" {{ $article->category == 'technology' ? 'selected' : '' }}>Technology</option>
-            <option value="science" {{ $article->category == 'science' ? 'selected' : '' }}>Science</option>
-            <option value="health" {{ $article->category == 'health' ? 'selected' : '' }}>Health</option>
-            <option value="sports" {{ $article->category == 'sports' ? 'selected' : '' }}>Sports</option>
-            <option value="entertainment" {{ $article->category == 'entertainment' ? 'selected' : '' }}>Entertainment</option>
-        </select>
+            <label class="block text-gray-700 text-lg font-semibold mb-2" for="category">Category</label>
+            <select name="category" id="category" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring focus:ring-red-200" required>
+                <option value="" disabled selected>Select a category</option>
+                <!-- Options will be dynamically populated based on sts value -->
+            </select>
         </div>
 
         <!-- Image Upload Section -->
@@ -60,7 +56,8 @@
         </div>
 
          <!-- Status -->
-         <input type="hidden" name="sts" value="{{ old('sts', $article->sts) }}">
+         <input type="hidden" name="sts" id="sts" value="{{ old('sts', $article->sts) }}">
+
 
         <button type="submit" class="bg-red-600 text-white px-6 py-3 rounded-lg shadow hover:bg-red-700 transition duration-300">
             Update Article
@@ -73,6 +70,31 @@
 <!-- Include TinyMCE -->
 <script src="https://cdn.tiny.cloud/1/t4d8f3p0fnqaze0wj0rfr1kxftjdeulfrkzscrmzj1eokgrc/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
+    const sts = document.getElementById('sts').value; // Now the script will get the value of sts
+    const categorySelect = document.getElementById('category');
+
+    const categories = {
+        'news': ['Culture', 'Smile', 'Love'],
+        'article': ['Information', 'Knowledge']
+    };
+
+    // Populate categories based on sts value
+    if (categories[sts]) {
+        categories[sts].forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.toLowerCase();
+            option.textContent = category;
+
+            // If the current category is the one saved in the article, mark it as selected
+            if (category.toLowerCase() === '{{ strtolower($article->category) }}') {
+                option.selected = true;
+            }
+
+            categorySelect.appendChild(option);
+        });
+    }
+
+    // TinyMCE initialization
     tinymce.init({
         selector: '#content',
         menubar: false,
@@ -87,11 +109,13 @@
         }
     });
 
+    // Update title character count
     function updateTitleCounter() {
         const title = document.getElementById('title').value;
         document.getElementById('title-counter').innerText = `Character count: ${title.length}`;
     }
 
+    // Update content word count
     function updateContentCounter() {
         const content = tinymce.get('content').getContent({format: 'text'});
         const wordCount = content.split(/\s+/).filter(word => word.length > 0).length;
@@ -99,7 +123,7 @@
     }
 
     document.getElementById('title').addEventListener('input', updateTitleCounter);
-    updateTitleCounter(); // Initialize the title counter with current title length
-    updateContentCounter(); // Initialize the content counter with current content length
+    updateTitleCounter(); // Initialize the title counter with the current title length
+    updateContentCounter(); // Initialize the content counter with the current content length
 </script>
 @endsection

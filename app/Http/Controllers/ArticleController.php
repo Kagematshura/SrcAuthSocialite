@@ -119,7 +119,7 @@ class ArticleController extends Controller
             $query->where('sts', $request->input('sts'));
         }
 
-        $t_post = $query->latest()->paginate(6);
+        $t_post = $query->paginate(6);
         return view('article.home', compact('t_post'));
     }
     public function edit(Article $article)

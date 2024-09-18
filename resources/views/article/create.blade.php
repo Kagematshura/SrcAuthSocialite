@@ -27,9 +27,7 @@
             <label class="block text-gray-700 text-lg font-semibold mb-2" for="category">Category</label>
             <select name="category" id="category" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring focus:ring-red-200" required>
                 <option value="" disabled selected>Select a category</option>
-                <option value="technology">Technology</option>
-                <option value="sports">Sports</option>
-                <option value="entertainment">Entertainment</option>
+                <!-- Options will be dynamically populated based on sts value -->
             </select>
         </div>
 
@@ -64,6 +62,36 @@
 
 <script src="https://cdn.tiny.cloud/1/t4d8f3p0fnqaze0wj0rfr1kxftjdeulfrkzscrmzj1eokgrc/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Function to get query parameters from the URL
+    function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    // Get the 'sts' value from the URL
+    const sts = getQueryParam('sts');
+    const categorySelect = document.getElementById('category');
+
+    const categories = {
+        'news': ['Culture', 'Smile', 'Love'],
+        'article': ['Information', 'Knowledge']
+    };
+
+    // Clear existing options
+    categorySelect.innerHTML = '';
+
+    // Populate categories based on sts
+    if (categories[sts]) {
+        categories[sts].forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.toLowerCase();
+            option.textContent = category;
+            categorySelect.appendChild(option);
+        });
+    }
+});
+
     tinymce.init({
         selector: '#content',
         menubar: false,
