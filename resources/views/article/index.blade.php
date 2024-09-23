@@ -141,7 +141,7 @@
                                     <form action="{{ route('article.destroy', $article->id) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="bg-[#2C4A37] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200" onclick="return confirm('Are you sure you want to delete this article?')">Delete</button>
+                                        <button type="submit" class="bg-[#B54242] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#6a1f1f] transition duration-200" onclick="return confirm('Are you sure you want to delete this article?')">Delete</button>
                                     </form>
                                 </td>
                             </tr>
