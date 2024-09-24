@@ -13,6 +13,7 @@ box-sizing: border-box;
 font-family: 'Poppins', sans-serif;
 }
 body{
+overflow-x: hidden;
 }
 .sidebar{
 min-height: 100vh;
@@ -82,7 +83,9 @@ list-style: none;
 }
 .sidebar li .tooltip{
 position: absolute;
-top:-20px;
+/* top:-20px; */
+top: 50px;
+transform: translateY(-50%);
 left:calc(100% + 15px);
 z-index: 3;
 background-color: var(--color-white);

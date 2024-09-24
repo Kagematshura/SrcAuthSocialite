@@ -19,13 +19,57 @@
               </a>
               <span class="tooltip">Dashboard</span>
             </li>
+
             <li>
-              <a href="{{route('profile.index')}}">
-                <i class="bx bx-user"></i>
-                <span class="link_name">User</span>
-              </a>
-              <span class="tooltip">User</span>
+                <a href="javascript:void(0)" onclick="toggleDropdown('dropdown1')">
+                  <i class="bx bx-folder"></i>
+                <span class="link_name">Post
+                    <i class="bx bx-chevron-down"></i>
+                </span>
+                </a>
+                <span class="tooltip">Post</span>
+                <!-- Dropdown Menu -->
+                <ul class="dropdown hidden" id="dropdown1">
+                    <li onclick="filterBySts('news')" class="">
+                        <a href="#" class="ddItems">
+                            <i class='bx bx-news'></i>
+                            <span class="link_name">News</span>
+                        </a>
+                    </li>
+                    <li onclick="filterBySts('article')" class="">
+                        <a href="#" class="ddItems">
+                            <i class='bx bx-file'></i>
+                            <span class="link_name">Articles</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
+
+            <li>
+                <a href="javascript:void(0)" onclick="toggleDropdown('dropdown2')">
+                    <i class='bx bx-slider-alt'></i>
+                <span class="link_name">Utilities
+                    <i class="bx bx-chevron-down"></i>
+                </span>
+                </a>
+                <span class="tooltip">Utilities</span>
+                <!-- Dropdown Menu -->
+                <ul class="dropdown hidden" id="dropdown2">
+                    <li class="">
+                        <a href="{{route('profile.index')}}">
+                            <i class="bx bx-user"></i>
+                            <span class="link_name">User</span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#">
+                            <i class='bx bx-news'></i>
+                            <span class="link_name">Articles</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li>
                 <a href="{{route('drafts.index')}}">
                 <i class='bx bx-send'></i>
@@ -43,8 +87,7 @@
             <li class="profile">
                 <div class="profile_details">
                         <div class="flex items-center space-x-2">
-                          <img src="{{ asset('storage/' . Auth::user()->profile_picture) ?? 'https://i.pinimg.com/236x/ad/73/1c/ad731cd0da0641bb16090f25778ef0fd.jpg' }}"
-                          class="w-10 h-10 rounded-full">
+                            <img src="{{ asset('storage/' . Auth::user()->profile_picture ?? 'default.jpg') }}" class="w-10 h-10 rounded-full" alt="Profile Picture">
                           <span class="text-[#DAD7CD]">{{ Str::limit(strip_tags(auth()->user()->name), 15, '...') ?? 'Guest' }}</span>
                         </div>
                       </div>
@@ -78,11 +121,11 @@
                 </div>
 
                 <!-- Sts Filter -->
-                <div class="items-center">
+                {{-- <div class="items-center">
                     <button onclick="filterBySts('news')" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow hover:bg-[#3A5A40] transition duration-300">Show News</button>
                     <button onclick="filterBySts('article')" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow hover:bg-[#3A5A40] transition duration-300">Show Article</button>
                     <button onclick="showAllArticles()" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow hover:bg-[#3A5A40] transition duration-300">Show All</button>
-                </div>
+                </div> --}}
 
                 <!-- Refresh Filter -->
                 <div>
@@ -167,25 +210,23 @@
     window.onload = function(){
     const sidebar = document.querySelector(".sidebar");
     const closeBtn = document.querySelector("#btn");
-    const searchBtn = document.querySelector(".bx-search")
+    // const searchBtn = document.querySelector(".bx-search")
 
     closeBtn.addEventListener("click",function(){
         sidebar.classList.toggle("open")
         menuBtnChange()
     })
 
-    searchBtn.addEventListener("click",function(){
-        sidebar.classList.toggle("open")
-        menuBtnChange()
-    })
+    // searchBtn.addEventListener("click",function(){
+    //     sidebar.classList.toggle("open")
+    //     menuBtnChange()
+    // })
 
-    function menuBtnChange(){
-        if(sidebar.classList.contains("open")){
-            closeBtn.classList.replace("bx-menu","bx-menu-alt-right")
-        }else{
-            closeBtn.classList.replace("bx-menu-alt-right","bx-menu")
-        }
-    }
+}
+
+function toggleDropdown(id) {
+    var dropdown = document.getElementById(id);
+    dropdown.classList.toggle("hidden");
 }
 
 function applyTitleFilter() {
