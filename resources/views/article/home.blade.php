@@ -4,58 +4,95 @@
 {{-- Sidebar and Content Wrapper --}}
 <div class="sidebar">
     <div class="logo_details">
-      <i>
-          <img src="" alt="">
-      </i>
-      <div class="logo_name">Laz GDI</div>
-      <i class="bx bx-menu" id="btn"></i>
+        <i>
+            <img src="" alt="">
+        </i>
+        <div class="logo_name">Laz GDI</div>
+        <i class="bx bx-menu" id="btn"></i>
     </div>
     <ul class="nav-list">
-      <li>
-        <a href="{{route('article.index')}}">
-          <i class="bx bx-grid-alt"></i>
-          <span class="link_name">Dashboard</span>
-        </a>
-        <span class="tooltip">Dashboard</span>
-      </li>
-      <li>
-        <a href="{{route('profile.index')}}">
-          <i class="bx bx-user"></i>
-          <span class="link_name">User</span>
-        </a>
-        <span class="tooltip">User</span>
-      </li>
-      <li>
-          <a href="{{route('drafts.index')}}">
-          <i class='bx bx-send'></i>
-            <span class="link_name">Drafts</span>
-          </a>
-          <span class="tooltip">Pending</span>
+        <li>
+            <a href="{{route('article.index')}}">
+                <i class="bx bx-grid-alt"></i>
+                <span class="link_name">Dashboard</span>
+            </a>
+            <span class="tooltip">Dashboard</span>
         </li>
-      <li>
-        <a href="{{route('article.home')}}">
-          <i class='bx bx-home-alt' ></i>
-          <span class="link_name">Home</span>
-        </a>
-        <span class="tooltip">Home</span>
-      </li>
-      <li class="profile">
-          <div class="profile_details">
-                  <div class="flex items-center space-x-2">
-                    <img src="{{ asset('storage/' . Auth::user()->profile_picture) ?? 'https://i.pinimg.com/236x/ad/73/1c/ad731cd0da0641bb16090f25778ef0fd.jpg' }}"
-                    class="w-10 h-10 rounded-full">
+
+        <li>
+            <a href="javascript:void(0)" onclick="toggleDropdown('dropdown1')">
+                <i class="bx bx-folder"></i>
+                <span class="link_name">Post
+                    <i class="bx bx-chevron-down"></i>
+                </span>
+            </a>
+            <span class="tooltip">Post</span>
+            <!-- Dropdown Menu -->
+            <ul class="dropdown hidden" id="dropdown1">
+                <li onclick="filterBySts('news')" class="">
+                    <a href="#" class="ddItems pl-6">
+                        <i class='bx bx-news'></i>
+                        <span class="link_name">News</span>
+                    </a>
+                </li>
+                <li onclick="filterBySts('article')" class="">
+                    <a href="#" class="ddItems pl-6">
+                        <i class='bx bx-file'></i>
+                        <span class="link_name">Articles</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="javascript:void(0)" onclick="toggleDropdown('dropdown2')">
+                <i class='bx bx-slider-alt'></i>
+                <span class="link_name">Utilities
+                    <i class="bx bx-chevron-down"></i>
+                </span>
+            </a>
+            <span class="tooltip">Utilities</span>
+            <!-- Dropdown Menu -->
+            <ul class="dropdown hidden" id="dropdown2">
+                <li class="">
+                    <a href="{{route('profile.index')}}" class="pl-6">
+                        <i class="bx bx-user"></i>
+                        <span class="link_name">User</span>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="{{route('drafts.index')}}" class="pl-6">
+                        <i class='bx bx-send'></i>
+                        <span class="link_name">Drafts</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="{{route('article.home')}}">
+                <i class='bx bx-home-alt'></i>
+                <span class="link_name">Home</span>
+            </a>
+            <span class="tooltip">Home</span>
+        </li>
+
+        <li class="profile">
+            <div class="profile_details">
+                <div class="flex items-center space-x-2">
+                    <img src="{{ asset('storage/' . Auth::user()->profile_picture ?? 'default.jpg') }}" class="w-10 h-10 rounded-full" alt="Profile Picture">
                     <span class="text-[#DAD7CD]">{{ Str::limit(strip_tags(auth()->user()->name), 15, '...') ?? 'Guest' }}</span>
-                  </div>
                 </div>
-          <form action="{{ route('logout') }}" method="POST" class="inline-block">
-            @csrf
-            <button type="submit" id="log_out" class="bg-[#2C4A37] text-white w-full h-12 flex items-center justify-center rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200">
-              <i class="bx bx-log-out"></i>
-            </button>
-          </form>
+            </div>
+            <form action="{{ route('logout') }}" method="POST" class="inline-block">
+                @csrf
+                <button type="submit" id="log_out" class="bg-[#2C4A37] text-white w-full h-12 flex items-center justify-center rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200">
+                    <i class="bx bx-log-out"></i>
+                </button>
+            </form>
         </li>
     </ul>
-  </div>
+</div>
 
   <div class="home-section px-4 py-8">
 
@@ -116,33 +153,42 @@
 </div>
 
 <script>
- window.onload = function(){
-    const sidebar = document.querySelector(".sidebar");
-    const closeBtn = document.querySelector("#btn");
-    const searchBtn = document.querySelector(".bx-search")
+  window.onload = function () {
+        const sidebar = document.querySelector(".sidebar");
+        const closeBtn = document.querySelector("#btn");
 
-    closeBtn.addEventListener("click",function(){
-        sidebar.classList.toggle("open")
-        menuBtnChange()
-    })
+        closeBtn.addEventListener("click", function () {
+            sidebar.classList.toggle("open");
+            closeDropdowns(); // Close dropdowns when collapsing sidebar
+            menuBtnChange();
+        });
 
-    searchBtn.addEventListener("click",function(){
-        sidebar.classList.toggle("open")
-        menuBtnChange()
-    })
-
-    function menuBtnChange(){
-        if(sidebar.classList.contains("open")){
-            closeBtn.classList.replace("bx-menu","bx-menu-alt-right")
-        }else{
-            closeBtn.classList.replace("bx-menu-alt-right","bx-menu")
+        function menuBtnChange() {
+            if (sidebar.classList.contains("open")) {
+                closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+            } else {
+                closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+            }
         }
+
+        // Function to close all dropdowns when sidebar is collapsed
+        function closeDropdowns() {
+            var dropdowns = document.querySelectorAll('.dropdown');
+            dropdowns.forEach(function (dropdown) {
+                dropdown.classList.add('hidden');
+            });
+        }
+    };
+
+    // Function to toggle individual dropdowns
+    function toggleDropdown(id) {
+        const dropdown = document.getElementById(id);
+        dropdown.classList.toggle('hidden');
     }
-}
 
     function filterBySts(sts) {
         var articles = document.querySelectorAll('.article-card');
-        articles.forEach(function(article) {
+        articles.forEach(function (article) {
             if (article.getAttribute('data-sts') === sts) {
                 article.style.display = 'block';
             } else {
@@ -153,7 +199,7 @@
 
     function showAllArticles() {
         var articles = document.querySelectorAll('.article-card');
-        articles.forEach(function(article) {
+        articles.forEach(function (article) {
             article.style.display = 'block';
         });
     }

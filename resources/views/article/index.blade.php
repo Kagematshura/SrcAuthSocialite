@@ -31,13 +31,13 @@
                 <!-- Dropdown Menu -->
                 <ul class="dropdown hidden" id="dropdown1">
                     <li onclick="filterBySts('news')" class="">
-                        <a href="#" class="ddItems">
+                        <a href="#" class="ddItems pl-6">
                             <i class='bx bx-news'></i>
                             <span class="link_name">News</span>
                         </a>
                     </li>
                     <li onclick="filterBySts('article')" class="">
-                        <a href="#" class="ddItems">
+                        <a href="#" class="ddItems pl-6">
                             <i class='bx bx-file'></i>
                             <span class="link_name">Articles</span>
                         </a>
@@ -56,27 +56,20 @@
                 <!-- Dropdown Menu -->
                 <ul class="dropdown hidden" id="dropdown2">
                     <li class="">
-                        <a href="{{route('profile.index')}}">
+                        <a href="{{route('profile.index')}}" class="pl-6">
                             <i class="bx bx-user"></i>
                             <span class="link_name">User</span>
                         </a>
                     </li>
                     <li class="">
-                        <a href="#">
-                            <i class='bx bx-news'></i>
-                            <span class="link_name">Articles</span>
+                        <a href="{{route('drafts.index')}}" class="pl-6">
+                            <i class='bx bx-send'></i>
+                            <span class="link_name">Drafts</span>
                         </a>
                     </li>
                 </ul>
             </li>
 
-            <li>
-                <a href="{{route('drafts.index')}}">
-                <i class='bx bx-send'></i>
-                  <span class="link_name">Drafts</span>
-                </a>
-                <span class="tooltip">Pending</span>
-              </li>
             <li>
               <a href="{{route('article.home')}}">
                 <i class='bx bx-home-alt' ></i>
@@ -103,6 +96,11 @@
 
         {{-- Your content goes here --}}
         <section class="home-section flex-1 p-8">
+
+            <div class="mb-8">
+                <span>This is where the directional path or address gonna go</span>
+            </div>
+
             {{-- Filters n Sorting --}}
             <div class="flex justify-between items-center mb-4">
                 {{-- Title Filter --}}
@@ -120,12 +118,11 @@
                     <button onclick="sortArticles()" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#3A5A40] transition duration-200">Sort</button>
                 </div>
 
-                <!-- Sts Filter -->
-                {{-- <div class="items-center">
-                    <button onclick="filterBySts('news')" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow hover:bg-[#3A5A40] transition duration-300">Show News</button>
-                    <button onclick="filterBySts('article')" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow hover:bg-[#3A5A40] transition duration-300">Show Article</button>
-                    <button onclick="showAllArticles()" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow hover:bg-[#3A5A40] transition duration-300">Show All</button>
-                </div> --}}
+                {{-- create article button --}}
+                <div class="flex items-center space-x-4">
+                    <a href="{{ route('article.create', ['sts' => 'news']) }}" id="createNewsBtn" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200" style="display: none;">Add News</a>
+                    <a href="{{ route('article.create', ['sts' => 'article']) }}" id="createArticleBtn" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200" style="display: none;">Add Article</a>
+                </div>
 
                 <!-- Refresh Filter -->
                 <div>
@@ -198,35 +195,32 @@
                 {{ $t_post->links('pagination::tailwind') }}
             </div>
 
-            {{-- create article button --}}
-            <div class="items-center mt-8">
-                <a href="{{ route('article.create', ['sts' => 'news']) }}" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow hover:bg-[#3A5A40] transition duration-300">Add News</a>
-                <a href="{{ route('article.create', ['sts' => 'article']) }}" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow hover:bg-[#3A5A40] transition duration-300">Add Article</a>
-            </div>
         </section>
     </div>
 
 <script>
-    window.onload = function(){
-    const sidebar = document.querySelector(".sidebar");
-    const closeBtn = document.querySelector("#btn");
-    // const searchBtn = document.querySelector(".bx-search")
+window.onload = function(){
+const sidebar = document.querySelector(".sidebar");
+const closeBtn = document.querySelector("#btn");
 
-    closeBtn.addEventListener("click",function(){
-        sidebar.classList.toggle("open")
-        menuBtnChange()
-    })
-
-    // searchBtn.addEventListener("click",function(){
-    //     sidebar.classList.toggle("open")
-    //     menuBtnChange()
-    // })
-
+closeBtn.addEventListener("click",function(){
+    sidebar.classList.toggle("open");
+    menuBtnChange();
+    closeAllDropdowns();
+});
 }
 
 function toggleDropdown(id) {
     var dropdown = document.getElementById(id);
     dropdown.classList.toggle("hidden");
+}
+
+function closeAllDropdowns() {
+    // Find all elements with the class 'dropdown' and close them
+    var dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(function(dropdown) {
+        dropdown.classList.add('hidden');  // Ensure all dropdowns are hidden
+    });
 }
 
 function applyTitleFilter() {
@@ -273,8 +267,8 @@ function sortArticles() {
 function refreshFilters() {
     document.getElementById('titleFilter').value = '';
     document.getElementById('sortOrder').value = 'asc';
-    applyTitleFilter(); // Reset title filter
-    sortArticles(); // Reset sorting to default (ascending)
+    applyTitleFilter();
+    sortArticles();
 }
 
 // Filter by 'sts' (news or article)
@@ -282,6 +276,19 @@ function filterBySts(sts) {
     var articleTable = document.getElementById('articleTable');
     var rows = articleTable.getElementsByTagName('tr');
 
+    // Show/hide the relevant create buttons
+    var createNewsBtn = document.getElementById('createNewsBtn');
+    var createArticleBtn = document.getElementById('createArticleBtn');
+
+    if (sts === 'news') {
+        createNewsBtn.style.display = 'inline-block';
+        createArticleBtn.style.display = 'none';
+    } else if (sts === 'article') {
+        createNewsBtn.style.display = 'none';
+        createArticleBtn.style.display = 'inline-block';
+    }
+
+    // Filter articles by 'sts'
     for (var i = 0; i < rows.length; i++) {
         var stsCell = rows[i].getElementsByTagName('td')[4]; // Assuming 'Type' (sts) is in the 5th column
         if (stsCell) {
@@ -298,13 +305,31 @@ function filterBySts(sts) {
     }
 }
 
-// Show all articles (reset 'sts' filter)
+// Reset both buttons when showing all articles
 function showAllArticles() {
     var articleTable = document.getElementById('articleTable');
     var rows = articleTable.getElementsByTagName('tr');
 
+    // Show all rows
     for (var i = 0; i < rows.length; i++) {
-        rows[i].style.display = ''; // Show all rows
+        rows[i].style.display = '';
+    }
+
+    // Hide both create buttons when showing all articles
+    var createNewsBtn = document.getElementById('createNewsBtn');
+    var createArticleBtn = document.getElementById('createArticleBtn');
+
+    createNewsBtn.style.display = 'none';
+    createArticleBtn.style.display = 'none';
+}
+
+
+function menuBtnChange() {
+    const closeBtn = document.querySelector("#btn");
+    if (closeBtn.classList.contains("bx-menu")) {
+        closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+    } else {
+        closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
     }
 }
 
