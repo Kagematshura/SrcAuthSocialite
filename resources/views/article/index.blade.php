@@ -3,40 +3,37 @@
 @section('content')
 <div class="min-h-screen">
     {{-- Sidebar and Content Wrapper --}}
-        <div class="sidebar">
-          <div class="logo_details">
+    <div class="sidebar">
+        <div class="logo_details">
             <i>
                 <img src="" alt="">
             </i>
             <div class="logo_name">Laz GDI</div>
             <i class="bx bx-menu" id="btn"></i>
-          </div>
-          <ul class="nav-list">
+        </div>
+        <ul class="nav-list">
             <li>
-              <a href="{{route('article.index')}}">
-                <i class="bx bx-grid-alt"></i>
-                <span class="link_name">Dashboard</span>
-              </a>
-              <span class="tooltip">Dashboard</span>
+                <a href="{{ route('article.index') }}" onclick="updatePath('Dashboard')">
+                    <i class="bx bx-grid-alt"></i>
+                    <span class="link_name">Dashboard</span>
+                </a>
+                <span class="tooltip">Dashboard</span>
             </li>
-
             <li>
                 <a href="javascript:void(0)" onclick="toggleDropdown('dropdown1')">
-                  <i class="bx bx-folder"></i>
-                <span class="link_name">Post
-                    <i class="bx bx-chevron-down"></i>
-                </span>
+                    <i class="bx bx-folder"></i>
+                    <span class="link_name">Post <i class="bx bx-chevron-down"></i></span>
                 </a>
                 <span class="tooltip">Post</span>
                 <!-- Dropdown Menu -->
                 <ul class="dropdown hidden" id="dropdown1">
-                    <li onclick="filterBySts('news')" class="">
+                    <li onclick="filterBySts('news'); updatePath('Post', 'News')">
                         <a href="#" class="ddItems pl-6">
                             <i class='bx bx-news'></i>
                             <span class="link_name">News</span>
                         </a>
                     </li>
-                    <li onclick="filterBySts('article')" class="">
+                    <li onclick="filterBySts('article'); updatePath('Post', 'Articles')">
                         <a href="#" class="ddItems pl-6">
                             <i class='bx bx-file'></i>
                             <span class="link_name">Articles</span>
@@ -44,91 +41,90 @@
                     </li>
                 </ul>
             </li>
-
             <li>
                 <a href="javascript:void(0)" onclick="toggleDropdown('dropdown2')">
                     <i class='bx bx-slider-alt'></i>
-                <span class="link_name">Utilities
-                    <i class="bx bx-chevron-down"></i>
-                </span>
+                    <span class="link_name">Utilities <i class="bx bx-chevron-down"></i></span>
                 </a>
                 <span class="tooltip">Utilities</span>
                 <!-- Dropdown Menu -->
                 <ul class="dropdown hidden" id="dropdown2">
-                    <li class="">
-                        <a href="{{route('profile.index')}}" class="pl-6">
+                    <li>
+                        <a href="{{ route('profile.index') }}" class="pl-6" onclick="updatePath('Utilities', 'User')">
                             <i class="bx bx-user"></i>
                             <span class="link_name">User</span>
                         </a>
                     </li>
-                    <li class="">
-                        <a href="{{route('drafts.index')}}" class="pl-6">
+                    <li>
+                        <a href="{{ route('drafts.index') }}" class="pl-6" onclick="updatePath('Utilities', 'Drafts')">
                             <i class='bx bx-send'></i>
                             <span class="link_name">Drafts</span>
                         </a>
                     </li>
                 </ul>
             </li>
-
             <li>
-              <a href="{{route('article.home')}}">
-                <i class='bx bx-home-alt' ></i>
-                <span class="link_name">Home</span>
-              </a>
-              <span class="tooltip">Home</span>
+                <a href="{{ route('article.home') }}" onclick="updatePath('Home')">
+                    <i class='bx bx-home-alt'></i>
+                    <span class="link_name">Home</span>
+                </a>
+                <span class="tooltip">Home</span>
             </li>
             <li class="profile">
                 <div class="profile_details">
-                        <div class="flex items-center space-x-2">
-                            <img src="{{ asset('storage/' . Auth::user()->profile_picture ?? 'default.jpg') }}" class="w-10 h-10 rounded-full" alt="Profile Picture">
-                          <span class="text-[#DAD7CD]">{{ Str::limit(strip_tags(auth()->user()->name), 15, '...') ?? 'Guest' }}</span>
-                        </div>
-                      </div>
+                    <div class="flex items-center space-x-2">
+                        <img src="{{ asset('storage/' . Auth::user()->profile_picture ?? 'default.jpg') }}" class="w-10 h-10 rounded-full" alt="Profile Picture">
+                        <span class="text-[#DAD7CD]">{{ Str::limit(strip_tags(auth()->user()->name), 15, '...') ?? 'Guest' }}</span>
+                    </div>
+                </div>
                 <form action="{{ route('logout') }}" method="POST" class="inline-block">
-                  @csrf
-                  <button type="submit" id="log_out" class="bg-[#2C4A37] text-white w-full h-12 flex items-center justify-center rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200">
-                    <i class="bx bx-log-out"></i>
-                  </button>
+                    @csrf
+                    <button type="submit" id="log_out" class="bg-[#2C4A37] text-white w-full h-12 flex items-center justify-center rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200">
+                        <i class="bx bx-log-out"></i>
+                    </button>
                 </form>
-              </li>
-          </ul>
-        </div>
+            </li>
+        </ul>
+    </div>
 
         {{-- Your content goes here --}}
         <section class="home-section flex-1 p-8">
 
-            <div class="mb-8">
-                <span>This is where the directional path or address gonna go</span>
+             {{-- Breadcrumb / Path Display --}}
+        <div class="mb-8">
+            <span id="pathDisplay">Dashboard</span>
+            <input type="hidden" id="currentPath" value="Home">
+        </div>
+
+           {{-- Filters n Sorting --}}
+        <div class="flex justify-between items-center mb-4">
+
+            {{-- Title Filter --}}
+            <div class="flex items-center space-x-4">
+                <input type="text" id="titleFilter" class="bg-[#] border border-[#2C4A37] text-[#588157] rounded-lg p-2" placeholder="Filter by title">
+                <button onclick="applyTitleFilter()" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#3A5A40] transition duration-200">Apply Filter</button>
             </div>
 
-            {{-- Filters n Sorting --}}
-            <div class="flex justify-between items-center mb-4">
-                {{-- Title Filter --}}
-                <div class="flex items-center space-x-4">
-                    <input type="text" id="titleFilter" class="bg-[#] border border-[#2C4A37] text-[#588157] rounded-lg p-2" placeholder="Filter by title">
-                    <button onclick="applyTitleFilter()" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#3A5A40] transition duration-200">Apply Filter</button>
-                </div>
-
-                <!-- Sorting -->
-                <div class="flex items-center space-x-4">
-                    <select id="sortOrder" class="bg-[#2C4A37] border border-[#2C4A37] text-[#DAD7CD] rounded-lg p-2">
-                        <option value="asc">Oldest</option>
-                        <option value="desc">Newest</option>
-                    </select>
-                    <button onclick="sortArticles()" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#3A5A40] transition duration-200">Sort</button>
-                </div>
-
-                {{-- create article button --}}
-                <div class="flex items-center space-x-4">
-                    <a href="{{ route('article.create', ['sts' => 'news']) }}" id="createNewsBtn" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200" style="display: none;">Add News</a>
-                    <a href="{{ route('article.create', ['sts' => 'article']) }}" id="createArticleBtn" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200" style="display: none;">Add Article</a>
-                </div>
-
-                <!-- Refresh Filter -->
-                <div>
-                    <button onclick="refreshFilters()" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200">Refresh Filters</button> <!-- Darker Green for the button -->
-                </div>
+            {{-- Sorting --}}
+            <div class="flex items-center space-x-4">
+                <select id="sortOrder" class="bg-[#2C4A37] border border-[#2C4A37] text-[#DAD7CD] rounded-lg p-2">
+                    <option value="asc">Oldest</option>
+                    <option value="desc">Newest</option>
+                </select>
+                <button onclick="sortArticles()" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#3A5A40] transition duration-200">Sort</button>
             </div>
+
+            {{-- Create Article Button --}}
+            <div class="flex items-center space-x-4">
+                <a href="{{ route('article.create', ['sts' => 'news']) }}" id="createNewsBtn" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200" style="display: none;">Add News</a>
+                <a href="{{ route('article.create', ['sts' => 'article']) }}" id="createArticleBtn" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200" style="display: none;">Add Article</a>
+            </div>
+
+            {{-- Refresh Filter --}}
+            <div>
+                <button onclick="refreshFilters()" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200">Refresh Filters</button>
+            </div>
+        </div>
 
             {{-- Table --}}
             <div class="overflow-x-auto bg-[#2C4A37] p-4 rounded-lg shadow-lg">
@@ -200,14 +196,14 @@
 
 <script>
 window.onload = function(){
-const sidebar = document.querySelector(".sidebar");
-const closeBtn = document.querySelector("#btn");
+    const sidebar = document.querySelector(".sidebar");
+    const closeBtn = document.querySelector("#btn");
 
-closeBtn.addEventListener("click",function(){
-    sidebar.classList.toggle("open");
-    menuBtnChange();
-    closeAllDropdowns();
-});
+    closeBtn.addEventListener("click", function(){
+        sidebar.classList.toggle("open");
+        menuBtnChange();
+        closeAllDropdowns();
+    });
 }
 
 function toggleDropdown(id) {
@@ -216,11 +212,17 @@ function toggleDropdown(id) {
 }
 
 function closeAllDropdowns() {
-    // Find all elements with the class 'dropdown' and close them
     var dropdowns = document.querySelectorAll('.dropdown');
     dropdowns.forEach(function(dropdown) {
-        dropdown.classList.add('hidden');  // Ensure all dropdowns are hidden
+        dropdown.classList.add('hidden');
     });
+}
+
+// Function to update the path/address display
+function updatePath(...segments) {
+    const currentPath = segments.join(' > ');
+    document.getElementById('pathDisplay').innerText = currentPath;
+    document.getElementById('currentPath').value = currentPath;
 }
 
 function applyTitleFilter() {
@@ -236,9 +238,9 @@ function applyTitleFilter() {
 
             // Check if the title contains the filter text
             if (titleText.includes(titleFilter)) {
-                rows[i].style.display = ''; // Show row if it matches the filter
+                rows[i].style.display = '';
             } else {
-                rows[i].style.display = 'none'; // Hide row if it doesn't match
+                rows[i].style.display = 'none';
             }
         }
     }
@@ -250,15 +252,14 @@ function sortArticles() {
     var rows = Array.from(articleTable.getElementsByTagName('tr'));
 
     rows.sort(function(a, b) {
-        var dateA = new Date(a.getElementsByTagName('td')[5].innerText); // Published On is in 6th column
+        var dateA = new Date(a.getElementsByTagName('td')[5].innerText);
         var dateB = new Date(b.getElementsByTagName('td')[5].innerText);
 
-        if (isNaN(dateA) || isNaN(dateB)) return 0; // Handle invalid dates
+        if (isNaN(dateA) || isNaN(dateB)) return 0;
 
         return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
     });
 
-    // Append sorted rows back to the table
     rows.forEach(function(row) {
         articleTable.appendChild(row);
     });
