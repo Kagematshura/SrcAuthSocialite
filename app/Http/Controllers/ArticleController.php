@@ -29,23 +29,15 @@ class ArticleController extends Controller
     }
 
     public function store(Request $request)
-{
+    {
+
     $request->validate([
         'title' => 'required|max:255',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,json|max:2048',
         'content' => 'required',
         'category' => 'required|string',
         'sts' => 'required',
     ]);
-
-    // $imagePath = $request->hasFile('image') ? $request->file('image')->store('articles', 'public') : null;
-
-    // Article::create([
-    //     'title' => $request->title,
-    //     'content' => $request->content,
-    //     'user_id' => Auth::id(),
-    //     'image_path' => $imagePath,
-    // ]);
 
     $article = new Article;
     $article->title = $request->title;
@@ -55,46 +47,50 @@ class ArticleController extends Controller
     $article->sts = $request->sts;
 
     if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('articles', 'public');
-        $article->image_path = $imagePath;
-    }
-
-    $article->save();
-
-    return redirect()->route('article.index')->with('success', 'Article created successfully!');
-}
-
-
-    public function update(Request $request, $id)
-    {
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'content' => 'required|string',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'category' => 'required|string',
-        'sts' => 'required',
-    ]);
-
-    $article = Article::findOrFail($id);
-    $article->title = $request->input('title');
-    $article->content = $request->input('content');
-    $article->category = $request->input('category');
-
-    // Handle the image upload
-    if ($request->hasFile('image')) {
-        // Delete the old image if it exists
-        if ($article->image_path) {
-            Storage::delete('public/' . $article->image_path);
-        }
-
-        // Store the new image
         $imagePath = $request->file('image')->store('images', 'public');
         $article->image_path = $imagePath;
     }
 
     $article->save();
 
-    return redirect()->route('article.index')->with('success', 'Article updated successfully.');
+    return response()->json(['success' => true]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $article = Article::findOrFail($id);
+
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'content' => 'required|string',
+        'category' => 'required|string',
+        'sts' => 'required',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+    ]);
+
+    $article->update($validated);
+
+    if ($request->hasFile('image')) {
+        $currentImage = '/storage/'.$article->image_path;
+
+        if ($currentImage && file_exists(public_path($currentImage))) {
+            unlink(public_path($currentImage));
+        } else {
+            dd(public_path($currentImage));
+        }
+
+        $newImage = $request->file('image');
+        $imagePath = $newImage->store('images', 'public');
+        $article->image_path = $imagePath;
+    }
+
+    $article->title = $request->input('title');
+    $article->content = $request->input('content');
+    $article->category = $request->input('category');
+
+    $article->save();
+
+    return response()->json(['success' => true]);
 }
 
     public function destroy(Article $article)
@@ -122,8 +118,13 @@ class ArticleController extends Controller
         $t_post = $query->paginate(6);
         return view('article.home', compact('t_post'));
     }
-    public function edit(Article $article)
+    // public function edit(Article $article)
+    // {
+    //     return view('article.edit', compact('article'));
+    // }
+    public function edit($id)
     {
-        return view('article.edit', compact('article'));
+        $article = Article::findOrFail($id);
+        return response()->json($article);
     }
 }

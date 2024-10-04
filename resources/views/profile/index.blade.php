@@ -45,7 +45,7 @@
             <!-- Right-side Form Inputs -->
             <div class="flex-grow">
                 <!-- Profile Section -->
-                <div id="edit-profile" class="section active h-full flex flex-col justify-between">
+                <div id="edit-profile" class="section active flex flex-col justify-between">
                     <img src="{{ asset('storage/' . Auth::user()->profile_picture) ?? 'https://i.pinimg.com/236x/ad/73/1c/ad731cd0da0641bb16090f25778ef0fd.jpg' }}"
                          class="rounded-full object-cover mx-auto"
                          style="width: 160px; height: 160px;" alt="Profile Picture">
@@ -70,7 +70,7 @@
                 </div>
 
                 <!-- Save and Cancel Buttons -->
-                <div class="flex justify-end mt-4">
+                <div class="flex justify-end mt-6">
                     <button type="submit" class="bg-[#3A5A40] hover:bg-[#588157] px-4 py-2 rounded-lg text-white">Save</button>
                     <button id="cancel-button" type="button" class="ml-4 bg-[#B54242] hover:bg-[#A12B2B] px-4 py-2 rounded-lg text-white">Cancel</button>
                 </div>

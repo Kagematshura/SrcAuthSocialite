@@ -116,14 +116,10 @@
 
             {{-- Create Article Button --}}
             <div class="flex items-center space-x-4">
-                <a href="{{ route('article.create', ['sts' => 'news']) }}" id="createNewsBtn" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200" style="display: none;">Add News</a>
-                <a href="{{ route('article.create', ['sts' => 'article']) }}" id="createArticleBtn" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200" style="display: none;">Add Article</a>
+                <a onclick="openModal('news', 'news')" id="createNewsBtn" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200" style="display: none;">Add News</a>
+                <a onclick="openModal('article', 'article')" id="createArticleBtn" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200" style="display: none;">Add Article</a>
             </div>
 
-            {{-- Refresh Filter --}}
-            <div>
-                <button onclick="refreshFilters()" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#344E41] transition duration-200">Refresh Filters</button>
-            </div>
         </div>
 
             {{-- Table --}}
@@ -171,7 +167,7 @@
                                     {{ $article->updated_at->timezone('Asia/Jakarta')->format('F j, Y g:i A') }}
                                 </td>
                                 <td class="py-4 px-4 text-center">
-                                    <a href="{{ route('article.edit', $article->id) }}" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#3A5A40] transition duration-200">Edit</a>
+                                    <button onclick="openEditModal('{{ $article->id }}')" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-[#3A5A40] transition duration-200">Edit</button>
                                 </td>
                                 <td class="py-4 px-4 text-center">
                                     <form action="{{ route('article.destroy', $article->id) }}" method="POST" class="inline-block">
@@ -191,10 +187,125 @@
                 {{ $t_post->links('pagination::tailwind') }}
             </div>
 
+                <!-- Create Modal -->
+<div id="createModals" enctype="multipart/form-data" class="hidden fixed inset-0 bg-gray-800 bg-opacity-70 flex justify-center items-center">
+    <div class="bg-white rounded-xl p-8 shadow-2xl max-w-lg w-full transform transition-all duration-300 scale-95 hover:scale-100">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6" id="createModalTitle">Create Article</h2>
+        <form id="createForm">
+            <div id="error-messages" class="text-red-500 mb-4"></div>
+            @csrf
+            <input type="hidden" name="sts" id="sts" value="">
+
+            <!-- Title -->
+            <div class="mb-6">
+                <label class="block text-gray-700 text-lg font-medium mb-2" for="title">Title</label>
+                <input type="text" name="title" id="title" placeholder="Enter your title here..."
+                       class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-200">
+            </div>
+
+            <!-- Category -->
+            <div class="mb-6">
+                <label class="block text-gray-700 text-lg font-medium mb-2" for="category">Category</label>
+                <select name="category" id="category" required
+                        class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-200">
+                    <option value="" disabled selected>Select a category</option>
+                    <!-- Categories will be dynamically populated -->
+                </select>
+            </div>
+
+            <!-- Image -->
+            <div class="mb-6">
+                <label class="block text-gray-700 text-lg font-medium mb-2" for="image">Image</label>
+                <input type="file" name="image" id="image"
+                       class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-200">
+            </div>
+
+            <!-- Content -->
+            <div class="mb-6">
+                <label class="block text-gray-700 text-lg font-medium mb-2" for="content">Content</label>
+                <textarea name="content" id="content" rows="8" placeholder="Write your article content here..."
+                          class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-200"></textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-4">
+                <button type="button" onclick="closeModal()"
+                        class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-lg focus:outline-none transition duration-200">
+                    Cancel
+                </button>
+                <button type="submit"
+                        class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg focus:outline-none transition duration-200">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <!-- Edit Modal -->
+<div id="editModals" data-id="{{ $article->id ?? '' }}" enctype="multipart/form-data" class="hidden fixed inset-0 bg-gray-800 bg-opacity-70 flex justify-center items-center">
+    <div class="bg-white rounded-xl p-8 shadow-2xl max-w-lg w-full transform transition-all duration-300 scale-95 hover:scale-100">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6" id="editModalTitle"></h2>
+        <form id="editForm">
+            <div id="error-messages" class="text-red-500 mb-4"></div>
+            @csrf
+            @method('PATCH')
+            <input type="hidden" name="sts" id="stsEdit" value="">
+
+            <!-- Title -->
+            <div class="mb-6">
+                <label class="block text-gray-700 text-lg font-medium mb-2" for="title">Title</label>
+                <input type="text" name="title" id="titleEdit" value="" placeholder="Enter page's title" required
+                       class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-200">
+            </div>
+
+            <!-- Category -->
+            <div class="mb-6">
+                <label class="block text-gray-700 text-lg font-medium mb-2" for="category">Category</label>
+                <select name="category" id="categoryEdit" required
+                        class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-200">
+                    <option value="" disabled selected>Null on category selection?</option>
+                    <!-- Categories will be dynamically populated -->
+                </select>
+            </div>
+
+            <!-- Image -->
+            <div class="mb-6">
+                <label class="block text-gray-700 text-lg font-medium mb-2" for="image">Image</label>
+                <img id="post-image" alt="Image" class="w-32 h-32 object-cover rounded-lg shadow-md mt-4">
+                <p class="text-sm text-gray-500 mt-2">Current Image</p>
+                <input type="file" name="image" id="image"
+                       class="block w-full text-gray-800 px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-200 mt-4">
+            </div>
+
+            <!-- Content -->
+            <div class="mb-6">
+                <label class="block text-gray-700 text-lg font-medium mb-2" for="contentEdit">Content</label>
+                <textarea name="content" id="contentEdit" rows="8" placeholder="Write your article content here..." required
+                          class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-200"></textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-4">
+                <button type="button" onclick="closeEditModal()"
+                        class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-lg focus:outline-none transition duration-200">
+                    Cancel
+                </button>
+                <button type="submit"
+                        class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg focus:outline-none transition duration-200">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
         </section>
     </div>
 
-<script>
+    <script src="https://cdn.tiny.cloud/1/t4d8f3p0fnqaze0wj0rfr1kxftjdeulfrkzscrmzj1eokgrc/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
 window.onload = function(){
     const sidebar = document.querySelector(".sidebar");
     const closeBtn = document.querySelector("#btn");
@@ -265,13 +376,6 @@ function sortArticles() {
     });
 }
 
-function refreshFilters() {
-    document.getElementById('titleFilter').value = '';
-    document.getElementById('sortOrder').value = 'asc';
-    applyTitleFilter();
-    sortArticles();
-}
-
 // Filter by 'sts' (news or article)
 function filterBySts(sts) {
     var articleTable = document.getElementById('articleTable');
@@ -334,5 +438,277 @@ function menuBtnChange() {
     }
 }
 
+// Start of modals script
+    tinymce.init({
+        selector: '#content',
+        menubar: false,
+        plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | link image code',
+        height: 200,
+        setup: function(editor) {
+            editor.on('change', function() {
+                tinymce.triggerSave(); // Updates the hidden textarea with the WYSIWYG editor content
+            });
+        }
+    });
+
+    tinymce.init({
+        selector: '#contentEdit',
+        menubar: false,
+        plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | link image code',
+        height: 200,
+        setup: function(editor) {
+            editor.on('change', function() {
+                tinymce.triggerSave(); // Updates the hidden textarea with the WYSIWYG editor content
+            });
+        }
+    });
+
+    // Open the modal and set the sts value
+    function openModal(stsType) {
+        const form = document.getElementById('createForm');
+
+        form.reset();
+        form.removeAttribute('data-id');
+        form.action = '{{ route('article.store') }}';
+        form.method = 'POST';
+
+        document.getElementById('sts').value = stsType;
+        document.getElementById('createModalTitle').innerText = stsType === 'news' ? 'Create News' : 'Create Article';
+
+        populateCategories(stsType);
+
+        // Reinitialize TinyMCE to ensure the content field is functional
+    tinymce.get('content').setContent('');
+    tinymce.init({
+        selector: '#content',
+        menubar: false,
+        plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | link image code',
+        height: 200,
+        setup: function(editor) {
+            editor.on('change', function() {
+                tinymce.triggerSave();
+            });
+        }
+    });
+        document.getElementById('createModals').classList.remove('hidden');
+    }
+
+    // Open the modal for editing an article
+    function openEditModal(id) {
+    fetch(`/articles/${id}/edit`, {
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => response.json())
+    .then(article => {
+    const form = document.getElementById('editForm');
+    document.getElementById('titleEdit').value = article.title;
+    document.getElementById('categoryEdit').value = article.category;
+    document.getElementById('contentEdit').value = article.content;
+    document.getElementById('stsEdit').value = article.sts;
+
+    tinymce.get('contentEdit').setContent(article.content);
+
+    document.getElementById('editModalTitle').innerText = article.sts === 'news' ? 'Edit News' : 'Edit Article';
+
+    populateImageEdit(article.image_path);
+    populateCategoriesEdit(article.sts, article.category);
+
+    form.setAttribute('data-id', article.id);
+    form.action = `/articles/${id}`;
+    form.method = 'PATCH';
+    let formData = new FormData(form);
+    formData.append('_method', 'PATCH');
+
+    // Reinitialize TinyMCE to ensure the content field is functional
+    tinymce.init({
+        selector: '#contentEdit',
+        menubar: false,
+        plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | link image code',
+        height: 200,
+        setup: function(editor) {
+            editor.on('change', function() {
+                tinymce.triggerSave();
+            });
+        }
+    });
+
+    document.getElementById('editModals').classList.remove('hidden');
+})
+    .catch(error => {
+        console.error('Error fetching article:', error);
+    });
+}
+
+    function closeModal() {
+        clearCategories();
+        document.getElementById('createModals').classList.add('hidden');
+    }
+
+    function closeEditModal() {
+        clearCategories();
+        document.getElementById('editModals').classList.add('hidden');
+    }
+
+
+    // Handle form submission
+    document.getElementById('createForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const id = this.getAttribute('data-id');
+    const formData = new FormData(this);
+
+    const method = 'POST';
+    const url = '{{ route('article.store') }}';
+
+    fetch(url, {
+        method: method,
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            closeModal();
+            location.reload();
+        } else if (data.errors) {
+            displayValidationErrors(data.errors);
+        }
+    })
+
+    .catch(error => {
+        console.error('Fetch error:', error);
+    });
+
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+    }
+});
+
+    document.getElementById('editForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const id = this.getAttribute('data-id');
+        const url = `/articles/${id}`;
+
+        const formData = new FormData(this);
+
+        $.ajax({
+        type: 'POST',
+        url: url,
+        data: formData,
+        contentType: false, // Important: set this to false to allow jQuery to handle the FormData
+        processData: false, // Important: set this to false to prevent jQuery from processing the data
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'X-HTTP-Method-Override': 'PATCH',
+        },
+        success: function(response) {
+            console.log(response);
+            closeEditModal();
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            console.log(xhr.responseJSON);
+        }
+        });
+
+        // formData debugging
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+    });
+
+
+    // Function to display validation errors on the form
+    function displayValidationErrors(errors) {
+        let errorList = '';
+
+        Object.keys(errors).forEach((field) => {
+            errors[field].forEach((errorMsg) => {
+                errorList += `<p>${errorMsg}</p>`;
+            });
+
+            let inputField = document.querySelector(`[name=${field}]`);
+            if (inputField) {
+                inputField.classList.add('border-red-500');
+            }
+        });
+
+        document.querySelectorAll('input, select, textarea').forEach((field) => {
+            field.addEventListener('input', function() {
+                this.classList.remove('border-red-500');
+            });
+        });
+
+        document.getElementById('error-messages').innerHTML = errorList;
+    }
+
+    function populateCategories(stsType) {
+    let categories = {
+        news: ['Culture', 'Smile', 'Love'],
+        article: ['Information', 'Knowledge']
+    };
+
+    let categorySelect = document.getElementById('category');
+
+    categorySelect.innerHTML = '';
+
+    categories[stsType].forEach(category => {
+        let option = document.createElement('option');
+        option.value = category.toLowerCase();
+        option.text = category;
+        categorySelect.appendChild(option);
+    });
+};
+
+function populateCategoriesEdit(stsType, selectedCategory) {
+    let categories = {
+        news: ['Culture', 'Smile', 'Love'],
+        article: ['Information', 'Knowledge']
+    };
+
+    let categorySelectEdit = document.getElementById('categoryEdit');
+    categorySelectEdit.innerHTML = '';
+
+    categories[stsType].forEach(category => {
+        let option = document.createElement('option');
+        option.value = category.toLowerCase();
+        option.text = category;
+
+        // Check if the current option matches the article's category
+        if (category.toLowerCase() === selectedCategory.toLowerCase()) {
+            option.selected = true;
+        }
+
+        categorySelectEdit.appendChild(option);
+    });
+}
+
+    function clearCategories() {
+        let categorySelect = document.getElementById('category');
+        categorySelect.innerHTML = '';
+        let categorySelectEdit = document.getElementById('categoryEdit');
+        categorySelectEdit.innerHTML = '';
+    }
+
+    function populateImageEdit(imageUrl) {
+    const imageElement = document.getElementById('post-image');
+    if (imageUrl) {
+        imageElement.src = `storage/${imageUrl}`;
+    } else {
+        imageElement.src = 'https://github.com/WardenHi/lavarel-intern/blob/lavarel-intern/public/img/image-post-default.png?raw=true';  // If no image, set a default placeholder
+    }
+}
+
+// End of modals script
 </script>
 @endsection

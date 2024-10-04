@@ -43,7 +43,7 @@ Route::post('/article', [ArticleController::class, 'store'])->name('article.stor
 
 // Edit and Update Routes
 Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('article.edit');
-Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('article.update');
+Route::patch('/articles/{article}', [ArticleController::class, 'update'])->name('article.update');
 
 // Delete Route
 Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('article.destroy');
