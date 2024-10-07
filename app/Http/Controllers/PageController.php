@@ -20,4 +20,8 @@ class PageController extends Controller
     {
         return view('welcome');
     }
+    public function payment()
+    {
+        return view('payment');
+    }
 }

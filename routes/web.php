@@ -9,6 +9,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\DraftController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\PaymentController;
 
 // Home route
 Route::get('/', function () {
@@ -19,6 +20,7 @@ Route::get('/', function () {
 Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
 Route::get('/register', [PageController::class, 'register'])->name('register');
 Route::get('/welcome', [PageController::class, 'welcome'])->name('welcome');
+Route::get('/payment', [PageController::class, 'payment'])->name('payment');
 
 // Registration routes
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
@@ -65,3 +67,6 @@ Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index
 Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
 
+// Payment
+Route::post('/payment', [PaymentController::class, 'initiatePayment']);
+Route::post('/payment/notification', [PaymentController::class, 'handleNotification']);
