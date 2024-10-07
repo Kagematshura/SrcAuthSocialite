@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\GoogleAuthController;
@@ -17,10 +18,12 @@ Route::get('/', function () {
 });
 
 // Page routes
-Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
 Route::get('/register', [PageController::class, 'register'])->name('register');
 Route::get('/welcome', [PageController::class, 'welcome'])->name('welcome');
 Route::get('/payment', [PageController::class, 'payment'])->name('payment');
+
+// Dashboard
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // Registration routes
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');

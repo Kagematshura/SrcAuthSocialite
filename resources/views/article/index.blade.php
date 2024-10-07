@@ -13,14 +13,14 @@
         </div>
         <ul class="nav-list">
             <li>
-                <a href="{{ route('article.index') }}" onclick="updatePath('Dashboard')">
+                <a href="{{ route('dashboard') }}" onclick="updatePath('Dashboard')">
                     <i class="bx bx-grid-alt"></i>
                     <span class="link_name">Dashboard</span>
                 </a>
                 <span class="tooltip">Dashboard</span>
             </li>
             <li>
-                <a href="javascript:void(0)" onclick="toggleDropdown('dropdown1')">
+                <a href="#" onclick="toggleDropdown('dropdown1')">
                     <i class="bx bx-folder"></i>
                     <span class="link_name">Post <i class="bx bx-chevron-down"></i></span>
                 </a>
