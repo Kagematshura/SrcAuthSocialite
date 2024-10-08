@@ -13,7 +13,7 @@
         </div>
         <ul class="nav-list">
             <li>
-                <a href="{{ route('dashboard') }}" onclick="updatePath('Dashboard')">
+                <a href="{{ route('dashboard.index') }}" onclick="updatePath('Dashboard')">
                     <i class="bx bx-grid-alt"></i>
                     <span class="link_name">Dashboard</span>
                 </a>

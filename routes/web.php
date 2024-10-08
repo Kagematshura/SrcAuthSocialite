@@ -23,7 +23,7 @@ Route::get('/welcome', [PageController::class, 'welcome'])->name('welcome');
 Route::get('/payment', [PageController::class, 'payment'])->name('payment');
 
 // Dashboard
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 // Registration routes
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');

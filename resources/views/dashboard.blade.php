@@ -16,12 +16,12 @@
     </div>
     <ul class="nav-list">
         <li>
-            <a href="{{ route('dashboard') }}" onclick="updatePath('Dashboard')">
+            <a href="{{ route('dashboard.index') }}" onclick="updatePath('Dashboard')">
                 <i class="bx bx-grid-alt"></i>
                 <span class="link_name">Dashboard</span>
             </a>
             <span class="tooltip">Dashboard</span>
-        </li>
+        </li>   
         <li>
             <a href="{{route('article.index')}}" onclick="toggleDropdown('dropdown1')">
                 <i class="bx bx-folder"></i>
@@ -93,9 +93,10 @@
 
 {{-- Content --}}
 <section class="home-section flex-1 p-8">
+    <h1 class="my-8 text-center">Dashboard</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Bar Chart -->
-        <div class="bg-white p-4 rounded-lg shadow-md">
+        <div class="bg-white p-4 rounded-lg shadow-md ">
             <canvas id="barChart"></canvas>
         </div>
 
@@ -108,66 +109,70 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    window.onload = function(){
-        const sidebar = document.querySelector(".sidebar");
-        const closeBtn = document.querySelector("#btn");
+    window.onload = function() {
+    const sidebar = document.querySelector(".sidebar");
+    const closeBtn = document.querySelector("#btn");
 
-        closeBtn.addEventListener("click", function(){
-            sidebar.classList.toggle("open");
-            menuBtnChange();
-            closeAllDropdowns();
-        });
+    closeBtn.addEventListener("click", function(){
+        sidebar.classList.toggle("open");
+        menuBtnChange();
+        closeAllDropdowns();
+    });
 
-        // Bar Chart Example
-        const barChartCtx = document.getElementById('barChart').getContext('2d');
-        const barChart = new Chart(barChartCtx, {
-            type: 'bar',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May'],
-                datasets: [{
-                    label: 'Number of Posts',
-                    data: [100, 120, 123, 80, 90], // Example data, replace with your dynamic data
-                    backgroundColor: ['#588157', '#3A5A40', '#DAD7CD', '#D9EAD3', '#2C4A37'],
-                    borderColor: ['#344E41'],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+    // Bar Chart Example
+    const barChartCtx = document.getElementById('barChart').getContext('2d');
+    const barChartData = @json(array_values($data));  // Dynamic data from the controller
+
+    console.log(barChartData); // Log to check if data is passed correctly
+
+    const barChart = new Chart(barChartCtx, {
+        type: 'bar',
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [{
+                label: 'Amount Raised',
+                data: barChartData,  // Use the dynamic data here
+                backgroundColor: ['#588157', '#3A5A40', '#DAD7CD', '#D9EAD3', '#2C4A37', '#588157', '#3A5A40', '#DAD7CD', '#D9EAD3', '#2C4A37', '#588157', '#3A5A40'],
+                borderColor: ['#344E41'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
+        }
+    });
 
-        // Pie Chart Example
-        const pieChartCtx = document.getElementById('pieChart').getContext('2d');
-        const pieChart = new Chart(pieChartCtx, {
-            type: 'pie',
-            data: {
-                labels: ['News', 'Articles', 'Drafts'],
-                datasets: [{
-                    label: 'Content Distribution',
-                    data: [10, 15, 5], // Example data, replace with your dynamic data
-                    backgroundColor: ['#588157', '#3A5A40', '#DAD7CD'],
-                    borderColor: ['#2C4A37'],
-                    borderWidth: 1
-                }]
-            }
-        });
-    }
+    // Pie Chart Example
+    const pieChartCtx = document.getElementById('pieChart').getContext('2d');
+    const pieChart = new Chart(pieChartCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Budaya', 'Cinta', 'Senyum'],
+            datasets: [{
+                label: 'Content Distribution',
+                data: [10, 15, 5], // Example data, replace with your dynamic data
+                backgroundColor: ['#588157', '#3A5A40', '#DAD7CD'],
+                borderColor: ['#2C4A37'],
+                borderWidth: 1
+            }]
+        }
+    });
+}
 
-    function toggleDropdown(id) {
-        var dropdown = document.getElementById(id);
-        dropdown.classList.toggle("hidden");
-    }
+function toggleDropdown(id) {
+    var dropdown = document.getElementById(id);
+    dropdown.classList.toggle("hidden");
+}
 
-    function closeAllDropdowns() {
-        var dropdowns = document.querySelectorAll('.dropdown');
-        dropdowns.forEach(function(dropdown) {
-            dropdown.classList.add('hidden');
-        });
-    }
+function closeAllDropdowns() {
+    var dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(function(dropdown) {
+        dropdown.classList.add('hidden');
+    });
+}
 </script>
 @endsection
