@@ -120,31 +120,31 @@
     });
 
     // Bar Chart Example
-    const barChartCtx = document.getElementById('barChart').getContext('2d');
-    const barChartData = @json(array_values($data));  // Dynamic data from the controller
+const barChartCtx = document.getElementById('barChart').getContext('2d');
+const barChartData = @json(array_values($data));  // Dynamic data from the controller
 
-    console.log(barChartData); // Log to check if data is passed correctly
+console.log(barChartData);  // Check if the data is passed correctly
 
-    const barChart = new Chart(barChartCtx, {
-        type: 'bar',
-        data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            datasets: [{
-                label: 'Amount Raised',
-                data: barChartData,  // Use the dynamic data here
-                backgroundColor: ['#588157', '#3A5A40', '#DAD7CD', '#D9EAD3', '#2C4A37', '#588157', '#3A5A40', '#DAD7CD', '#D9EAD3', '#2C4A37', '#588157', '#3A5A40'],
-                borderColor: ['#344E41'],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+const barChart = new Chart(barChartCtx, {
+    type: 'bar',
+    data: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        datasets: [{
+            label: 'Amount Raised',
+            data: barChartData,  // Use the dynamic data here
+            backgroundColor: ['#588157', '#3A5A40', '#DAD7CD', '#D9EAD3', '#2C4A37', '#588157', '#3A5A40', '#DAD7CD', '#D9EAD3', '#2C4A37', '#588157', '#3A5A40'],
+            borderColor: ['#344E41'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
             }
         }
-    });
+    }
+});
 
     // Pie Chart Example
     const pieChartCtx = document.getElementById('pieChart').getContext('2d');

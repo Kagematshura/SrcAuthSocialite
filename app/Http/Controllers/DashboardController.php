@@ -9,23 +9,23 @@ use App\Models\Transaction;
 class DashboardController extends Controller
 {
     public function index()
-    {
-        // Query to get total donations per month
-        $monthlyDonations = DB::table('transactions')
-            ->select(DB::raw('SUM(amount) as total'), DB::raw('MONTH(paid_at) as month'))
-            ->where('transaction_status', 'success')  // Only successful transactions
-            ->groupBy(DB::raw('MONTH(paid_at)'))
-            ->orderBy(DB::raw('MONTH(paid_at)'))
-            ->pluck('total', 'month');
+{
+    $monthlyData = Transaction::select(
+            DB::raw('SUM(gross_amount) as total'),
+            DB::raw('MONTH(created_at) as month')
+        )
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
 
-        // Fill an array with 12 months, defaulting to 0 if no data for that month
-        $data = array_fill(1, 12, 0);
-        foreach ($monthlyDonations as $month => $total) {
-            $data[$month] = $total;
-        }
+    $data = array_fill(0, 12, 0);  // Default array with 12 months filled with 0
 
-        return view('dashboard', compact('data'));  // Pass data to the view
+    foreach ($monthlyData as $entry) {
+        $data[$entry->month - 1] = $entry->total;
     }
+
+    return view('dashboard', compact('data'));
+}
 
     public function pie()
     {
