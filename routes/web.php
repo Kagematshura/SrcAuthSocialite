@@ -71,5 +71,7 @@ Route::put('/profile', [ProfileController::class, 'update'])->name('profile.upda
 Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
 
 // Payment
-Route::post('/payment', [PaymentController::class, 'initiatePayment']);
-Route::post('/payment/notification', [PaymentController::class, 'handleNotification']);
+Route::get('/payment', [PaymentController::class, 'viewTransactions'])->name('payment.view');
+Route::delete('/payment/{transaction}', [PaymentController::class, 'destroy'])->name('payment.destroy');
+Route::post('/payment/store', [PaymentController::class, 'processPayment'])->name('process.payment');
+Route::post('/notification/handling', [PaymentController::class, 'handleMidtransNotification']);

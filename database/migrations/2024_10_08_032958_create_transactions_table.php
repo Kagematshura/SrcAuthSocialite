@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');  // Links to users table
-            $table->decimal('amount', 10, 2);  // Donation amount
-            $table->string('transaction_status');  // Status (e.g., success, pending, failed)
-            $table->string('midtrans_transaction_id')->unique();  // Midtrans transaction ID
-            $table->timestamp('paid_at')->nullable();  // Time when the donation was completed
-            $table->timestamps();  // Includes created_at and updated_at
+            $table->string('order_id');
+            $table->integer('gross_amount');
+            $table->string('customer_first_name');
+            $table->string('customer_email');
+            $table->string('payment_type');
+            $table->string('status');
+            $table->timestamps();
         });
     }
 
