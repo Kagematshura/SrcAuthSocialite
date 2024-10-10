@@ -21,7 +21,7 @@
                 <span class="link_name">Dashboard</span>
             </a>
             <span class="tooltip">Dashboard</span>
-        </li>   
+        </li>
         <li>
             <a href="{{route('article.index')}}" onclick="toggleDropdown('dropdown1')">
                 <i class="bx bx-folder"></i>
@@ -154,7 +154,7 @@
             labels: ['Budaya', 'Cinta', 'Senyum'],
             datasets: [{
                 label: 'Content Distribution',
-                data: [10, 15, 5], // Example data, replace with your dynamic data
+                data: [20, 15, 5], // Example data, replace with your dynamic data
                 backgroundColor: ['#588157', '#3A5A40', '#DAD7CD'],
                 borderColor: ['#2C4A37'],
                 borderWidth: 1
