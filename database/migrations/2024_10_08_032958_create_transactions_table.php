@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->string('order_id');
+            $table->string('division');
             $table->integer('gross_amount');
             $table->string('customer_first_name');
             $table->string('customer_email');

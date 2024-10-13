@@ -9,23 +9,33 @@ use App\Models\Transaction;
 class DashboardController extends Controller
 {
     public function index()
-{
-    $monthlyData = Transaction::select(
-            DB::raw('SUM(gross_amount) as total'),
-            DB::raw('MONTH(created_at) as month')
-        )
-        ->groupBy('month')
-        ->orderBy('month')
-        ->get();
+    {
+        // Fetch all transactions
+        $transactions = Transaction::all();
 
-    $data = array_fill(0, 12, 0);  // Default array with 12 months filled with 0
+        // Group transactions by month for the bar chart
+        $monthlyData = Transaction::select(
+                DB::raw('SUM(gross_amount) as total'),
+                DB::raw('MONTH(created_at) as month')
+            )
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
 
-    foreach ($monthlyData as $entry) {
-        $data[$entry->month - 1] = $entry->total;
+        $data = array_fill(0, 12, 0);  // Default array with 12 months filled with 0
+
+        foreach ($monthlyData as $entry) {
+            $data[$entry->month - 1] = $entry->total;
+        }
+
+        // Sum of gross_amount grouped by division (for the pie chart)
+        $divisionData = Transaction::select('division', DB::raw('SUM(gross_amount) as total'))
+            ->groupBy('division')
+            ->get();
+
+        // Pass $data (for bar chart), $transactions (for table), and $divisionData (for pie chart)
+        return view('dashboard', compact('data', 'transactions', 'divisionData'));
     }
-
-    return view('dashboard', compact('data'));
-}
 
     public function pie()
     {
@@ -38,6 +48,7 @@ class DashboardController extends Controller
         'contributions' => $contributions,
         ]);
     }
+
 
     //store function
 }

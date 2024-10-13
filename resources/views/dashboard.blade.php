@@ -94,9 +94,10 @@
 {{-- Content --}}
 <section class="home-section flex-1 p-8">
     <h1 class="my-8 text-center">Dashboard</h1>
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Bar Chart -->
-        <div class="bg-white p-4 rounded-lg shadow-md ">
+        <div class="bg-white p-4 rounded-lg shadow-md">
             <canvas id="barChart"></canvas>
         </div>
 
@@ -105,6 +106,52 @@
             <canvas id="pieChart"></canvas>
         </div>
     </div>
+
+    <!-- Transactions Table -->
+    <div class="bg-white p-4 rounded-lg shadow-md mt-8">
+        <h2 class="text-xl font-semibold mb-4">Recent Transactions</h2>
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-700">
+                        <th class="px-4 py-2 border">Customer Name</th>
+                        <th class="px-4 py-2 border">Email</th>
+                        <th class="px-4 py-2 border">Amount</th>
+                        <th class="px-4 py-2 border">Payment Type</th>
+                        <th class="px-4 py-2 border">Categories</th>
+                        <th class="px-4 py-2 border">Status</th>
+                        <th class="px-4 py-2 border">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($transactions as $transaction)
+                        <tr>
+                            <td class="px-4 py-2 border">{{ $transaction->customer_first_name }}</td>
+                            <td class="px-4 py-2 border">{{ $transaction->customer_email }}</td>
+                            <td class="px-4 py-2 border">{{ number_format($transaction->gross_amount, 2) }}</td>
+                            <td class="px-4 py-2 border">{{ $transaction->payment_type }}</td>
+                            <td class="px-4 py-2 border">{{ $transaction->division }}</td>
+                            <td class="px-4 py-2 border">
+                                @if ($transaction->status === 'success')
+                                    <span class="text-green-500 font-semibold">{{ ucfirst($transaction->status) }}</span>
+                                @elseif ($transaction->status === 'pending')
+                                    <span class="text-yellow-500 font-semibold">{{ ucfirst($transaction->status) }}</span>
+                                @else
+                                    <span class="text-red-500 font-semibold">{{ ucfirst($transaction->status) }}</span>
+                                @endif
+                            </td>
+                            <td class="px-4 py-2 border">{{ $transaction->created_at->format('Y-m-d') }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="text-center px-4 py-2 border">No transactions available</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -146,22 +193,27 @@ const barChart = new Chart(barChartCtx, {
     }
 });
 
-    // Pie Chart Example
-    const pieChartCtx = document.getElementById('pieChart').getContext('2d');
-    const pieChart = new Chart(pieChartCtx, {
-        type: 'pie',
-        data: {
-            labels: ['Budaya', 'Cinta', 'Senyum'],
-            datasets: [{
-                label: 'Content Distribution',
-                data: [20, 15, 5], // Example data, replace with your dynamic data
-                backgroundColor: ['#588157', '#3A5A40', '#DAD7CD'],
-                borderColor: ['#2C4A37'],
-                borderWidth: 1
-            }]
-        }
-    });
-}
+   // Pie Chart Example
+   const pieChartCtx = document.getElementById('pieChart').getContext('2d');
+
+        // Dynamic data for the pie chart
+        const divisionLabels = @json($divisionData->pluck('division')); // ['Budaya', 'Cinta', 'Senyum']
+        const divisionAmounts = @json($divisionData->pluck('total'));  // [total for Budaya, total for Cinta, total for Senyum]
+
+        const pieChart = new Chart(pieChartCtx, {
+            type: 'pie',
+            data: {
+                labels: divisionLabels,  // Dynamic labels (e.g., 'Budaya', 'Cinta', 'Senyum')
+                datasets: [{
+                    label: 'Amount per Division',
+                    data: divisionAmounts,  // Dynamic values (e.g., totals for each division)
+                    backgroundColor: ['#588157', '#3A5A40', '#DAD7CD'],  // Colors for the divisions
+                    borderColor: ['#2C4A37'],
+                    borderWidth: 1
+                }]
+            }
+        });
+    }
 
 function toggleDropdown(id) {
     var dropdown = document.getElementById(id);

@@ -11,6 +11,7 @@ use App\Http\Controllers\DraftController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\TransactionController;
 
 // Home route
 Route::get('/', function () {
@@ -24,6 +25,9 @@ Route::get('/payment', [PageController::class, 'payment'])->name('payment');
 
 // Dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
+// Transaction
+
 
 // Registration routes
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
@@ -71,7 +75,7 @@ Route::put('/profile', [ProfileController::class, 'update'])->name('profile.upda
 Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
 
 // Payment
-Route::get('/payment', [PaymentController::class, 'viewTransactions'])->name('payment.view');
-Route::delete('/payment/{transaction}', [PaymentController::class, 'destroy'])->name('payment.destroy');
-Route::post('/payment/store', [PaymentController::class, 'processPayment'])->name('process.payment');
-Route::post('/notification/handling', [PaymentController::class, 'handleMidtransNotification']);
+Route::post('/payment/store', [PaymentController::class, 'create']);
+Route::post('/payment', [PaymentController::class, 'store']);
+Route::post('/payment/notification', [PaymentController::class, 'handleMidtransNotification']);
+
