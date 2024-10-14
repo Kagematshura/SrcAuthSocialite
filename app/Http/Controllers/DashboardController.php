@@ -33,7 +33,6 @@ class DashboardController extends Controller
             ->groupBy('division')
             ->get();
 
-        // Pass $data (for bar chart), $transactions (for table), and $divisionData (for pie chart)
         return view('dashboard', compact('data', 'transactions', 'divisionData'));
     }
 
@@ -49,6 +48,23 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function destroy(Transaction $transaction)
+    {
+        $transaction->delete();
 
-    //store function
+        return response()->json(['success' => true, 'message' => 'Transaction deleted successfully.']);
+    }
+
+public function update(Request $request, $id)
+    {
+        $request->validate([
+            'institution' => 'nullable|string|max:255',
+        ]);
+
+        $transaction = Transaction::findOrFail($id);
+        $transaction->institution = $request->institution;
+        $transaction->save();
+
+        return response()->json(['success' => true, 'message' => 'Transaction updated successfully.']);
+    }
 }

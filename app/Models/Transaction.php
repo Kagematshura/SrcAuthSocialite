@@ -26,6 +26,7 @@ class Transaction extends Model
         'payment_type',
         'snap_token',
         'status',
+        'institution',
     ];
 
     /**

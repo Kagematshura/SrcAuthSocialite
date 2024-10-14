@@ -25,6 +25,8 @@ Route::get('/payment', [PageController::class, 'payment'])->name('payment');
 
 // Dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+Route::put('/payment/{id}', [DashboardController::class, 'update']);
+Route::delete('/payment/{transaction}', [DashboardController::class, 'destroy'])->name('dashboard.destroy');
 
 // Transaction
 

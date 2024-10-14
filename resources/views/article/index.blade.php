@@ -447,7 +447,7 @@ function menuBtnChange() {
         height: 200,
         setup: function(editor) {
             editor.on('change', function() {
-                tinymce.triggerSave(); // Updates the hidden textarea with the WYSIWYG editor content
+                tinymce.triggerSave();
             });
         }
     });
@@ -460,7 +460,7 @@ function menuBtnChange() {
         height: 200,
         setup: function(editor) {
             editor.on('change', function() {
-                tinymce.triggerSave(); // Updates the hidden textarea with the WYSIWYG editor content
+                tinymce.triggerSave();
             });
         }
     });
@@ -605,8 +605,8 @@ function menuBtnChange() {
         type: 'POST',
         url: url,
         data: formData,
-        contentType: false, // Important: set this to false to allow jQuery to handle the FormData
-        processData: false, // Important: set this to false to prevent jQuery from processing the data
+        contentType: false,
+        processData: false,
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',
             'X-HTTP-Method-Override': 'PATCH',
@@ -708,7 +708,5 @@ function populateCategoriesEdit(stsType, selectedCategory) {
         imageElement.src = 'https://github.com/WardenHi/lavarel-intern/blob/lavarel-intern/public/img/image-post-default.png?raw=true';  // If no image, set a default placeholder
     }
 }
-
-// End of modals script
 </script>
 @endsection

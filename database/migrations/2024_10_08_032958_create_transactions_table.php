@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('customer_email');
             $table->string('payment_type');
             $table->string('status');
+            $table->string('institution')->nullable();
             $table->timestamps();
         });
     }

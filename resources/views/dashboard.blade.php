@@ -114,23 +114,32 @@
             <table class="table-auto w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-gray-200 text-gray-700">
+                        <th class="px-4 py-2 border">Order Id</th>
                         <th class="px-4 py-2 border">Customer Name</th>
                         <th class="px-4 py-2 border">Email</th>
                         <th class="px-4 py-2 border">Amount</th>
                         <th class="px-4 py-2 border">Payment Type</th>
                         <th class="px-4 py-2 border">Categories</th>
+                        <th class="px-4 py-2 border">Institution</th>
                         <th class="px-4 py-2 border">Status</th>
                         <th class="px-4 py-2 border">Date</th>
+                        <th class="px-4 py-2 border" colspan="2">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($transactions as $transaction)
-                        <tr>
+                        <tr data-transaction-id="{{ $transaction->id }}">
+                            <td class="px-4 py-2 border">{{ $transaction->order_id }}</td>
                             <td class="px-4 py-2 border">{{ $transaction->customer_first_name }}</td>
                             <td class="px-4 py-2 border">{{ $transaction->customer_email }}</td>
                             <td class="px-4 py-2 border">{{ number_format($transaction->gross_amount, 2) }}</td>
                             <td class="px-4 py-2 border">{{ $transaction->payment_type }}</td>
                             <td class="px-4 py-2 border">{{ $transaction->division }}</td>
+                            <td class="px-4 py-2 border">
+                                <span class="institution-display">{{ $transaction->institution }}</span>
+                                <input type="text" value="{{ $transaction->institution }}" class="institution-input hidden" />                            </td>
+                            </td>
+
                             <td class="px-4 py-2 border">
                                 @if ($transaction->status === 'success')
                                     <span class="text-green-500 font-semibold">{{ ucfirst($transaction->status) }}</span>
@@ -140,11 +149,22 @@
                                     <span class="text-red-500 font-semibold">{{ ucfirst($transaction->status) }}</span>
                                 @endif
                             </td>
+
                             <td class="px-4 py-2 border">{{ $transaction->created_at->format('Y-m-d') }}</td>
+                            <td class="px-4 py-2 border">
+                                <button type="button" class="edit-button bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition duration-300">Edit</button>
+                            </td>
+                            {{-- <td class="px-4 py-2 border">
+                                <form action="{{ secure_url('/payment', $transaction->id) }}" method="POST" class="inline-block">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-700 transition duration-300">Delete</button>
+                                </form>
+                            </td> --}}
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center px-4 py-2 border">No transactions available</td>
+                            <td colspan="9" class="text-center px-4 py-2 border">No transactions available</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -152,10 +172,13 @@
         </div>
     </div>
 
+
+
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    // Sidebar
     window.onload = function() {
     const sidebar = document.querySelector(".sidebar");
     const closeBtn = document.querySelector("#btn");
@@ -166,9 +189,9 @@
         closeAllDropdowns();
     });
 
-    // Bar Chart Example
+    // Bar Chart
 const barChartCtx = document.getElementById('barChart').getContext('2d');
-const barChartData = @json(array_values($data));  // Dynamic data from the controller
+const barChartData = @json(array_values($data));
 
 console.log(barChartData);  // Check if the data is passed correctly
 
@@ -178,7 +201,7 @@ const barChart = new Chart(barChartCtx, {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [{
             label: 'Amount Raised',
-            data: barChartData,  // Use the dynamic data here
+            data: barChartData,
             backgroundColor: ['#588157', '#3A5A40', '#DAD7CD', '#D9EAD3', '#2C4A37', '#588157', '#3A5A40', '#DAD7CD', '#D9EAD3', '#2C4A37', '#588157', '#3A5A40'],
             borderColor: ['#344E41'],
             borderWidth: 1
@@ -193,21 +216,20 @@ const barChart = new Chart(barChartCtx, {
     }
 });
 
-   // Pie Chart Example
+   // Pie Chart
    const pieChartCtx = document.getElementById('pieChart').getContext('2d');
 
-        // Dynamic data for the pie chart
-        const divisionLabels = @json($divisionData->pluck('division')); // ['Budaya', 'Cinta', 'Senyum']
-        const divisionAmounts = @json($divisionData->pluck('total'));  // [total for Budaya, total for Cinta, total for Senyum]
+        const divisionLabels = @json($divisionData->pluck('division'));
+        const divisionAmounts = @json($divisionData->pluck('total'));
 
         const pieChart = new Chart(pieChartCtx, {
             type: 'pie',
             data: {
-                labels: divisionLabels,  // Dynamic labels (e.g., 'Budaya', 'Cinta', 'Senyum')
+                labels: divisionLabels,  // Dynamic labels
                 datasets: [{
                     label: 'Amount per Division',
-                    data: divisionAmounts,  // Dynamic values (e.g., totals for each division)
-                    backgroundColor: ['#588157', '#3A5A40', '#DAD7CD'],  // Colors for the divisions
+                    data: divisionAmounts,
+                    backgroundColor: ['#588157', '#3A5A40', '#DAD7CD'],
                     borderColor: ['#2C4A37'],
                     borderWidth: 1
                 }]
@@ -215,6 +237,7 @@ const barChart = new Chart(barChartCtx, {
         });
     }
 
+    // Dropdown toggle
 function toggleDropdown(id) {
     var dropdown = document.getElementById(id);
     dropdown.classList.toggle("hidden");
@@ -226,5 +249,55 @@ function closeAllDropdowns() {
         dropdown.classList.add('hidden');
     });
 }
+
+// Edit institution
+document.querySelectorAll('.edit-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const row = this.closest('tr');
+        const input = row.querySelector('.institution-input');
+        const display = row.querySelector('.institution-display');
+
+        if (this.innerText === 'Edit') {
+            input.classList.remove('hidden');
+            display.classList.add('hidden');
+            this.innerText = 'Save';
+        } else {
+            input.classList.add('hidden');
+            display.classList.remove('hidden');
+
+            display.innerText = input.value;
+
+            this.innerText = 'Edit';
+
+            // Send updated data via AJAX
+            const formData = {
+                _token: '{{ csrf_token() }}',
+                institution: input.value,
+            };
+
+            const transactionId = row.getAttribute('data-transaction-id');
+
+            fetch(`/payment/${transactionId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    });
+});
+
+
 </script>
 @endsection

@@ -53,8 +53,8 @@
             height: 400,
             setup: function(editor) {
             editor.on('change', function() {
-                tinymce.triggerSave(); // Updates the hidden textarea with the WYSIWYG editor content
-                updateContentCounter(); // Update the word count
+                tinymce.triggerSave();
+                updateContentCounter();
             });
         }
     });

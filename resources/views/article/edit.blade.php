@@ -29,7 +29,6 @@
             <label class="block text-gray-700 text-lg font-semibold mb-2" for="category">Category</label>
             <select name="category" id="category" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring focus:ring-red-200" required>
                 <option value="" disabled selected>Select a category</option>
-                <!-- Options will be dynamically populated based on sts value -->
             </select>
         </div>
 
@@ -103,8 +102,8 @@
         height: 400,
         setup: function(editor) {
             editor.on('change', function() {
-                tinymce.triggerSave(); // Updates the hidden textarea with the WYSIWYG editor content
-                updateContentCounter(); // Update the word count
+                tinymce.triggerSave();
+                updateContentCounter();
             });
         }
     });
