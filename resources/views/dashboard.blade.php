@@ -95,6 +95,14 @@
 <section class="home-section flex-1 p-8">
     <h1 class="my-8 text-center">Dashboard</h1>
 
+    <form method="GET" action="{{ route('dashboard.index') }}">
+        <select name="year" onchange="this.form.submit()">
+            @for ($i = 2023; $i <= date('Y'); $i++)
+                <option value="{{ $i }}" {{ request('year') == $i ? 'selected' : '' }}>{{ $i }}</option>
+            @endfor
+        </select>
+    </form>
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Bar Chart -->
         <div class="bg-white p-4 rounded-lg shadow-md">
@@ -154,13 +162,6 @@
                             <td class="px-4 py-2 border">
                                 <button type="button" class="edit-button bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition duration-300">Edit</button>
                             </td>
-                            {{-- <td class="px-4 py-2 border">
-                                <form action="{{ secure_url('/payment', $transaction->id) }}" method="POST" class="inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-700 transition duration-300">Delete</button>
-                                </form>
-                            </td> --}}
                         </tr>
                     @empty
                         <tr>
@@ -171,8 +172,6 @@
             </table>
         </div>
     </div>
-
-
 
 </section>
 
@@ -190,32 +189,29 @@
     });
 
     // Bar Chart
-const barChartCtx = document.getElementById('barChart').getContext('2d');
-const barChartData = @json(array_values($data));
-
-console.log(barChartData);  // Check if the data is passed correctly
-
-const barChart = new Chart(barChartCtx, {
-    type: 'bar',
-    data: {
+    var barChartData = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [{
-            label: 'Amount Raised',
-            data: barChartData,
-            backgroundColor: ['#588157', '#3A5A40', '#DAD7CD', '#D9EAD3', '#2C4A37', '#588157', '#3A5A40', '#DAD7CD', '#D9EAD3', '#2C4A37', '#588157', '#3A5A40'],
-            borderColor: ['#344E41'],
+            label: 'Monthly Donations',
+            data: @json($data),
+            backgroundColor: '#588157',
+            borderColor: '#2C4A37',
             borderWidth: 1
         }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
+    };
+
+    var ctx = document.getElementById('barChart').getContext('2d');
+    var barChart = new Chart(ctx, {
+        type: 'bar',
+        data: barChartData,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
             }
         }
-    }
-});
-
+    });
    // Pie Chart
    const pieChartCtx = document.getElementById('pieChart').getContext('2d');
 
