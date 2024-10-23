@@ -15,7 +15,6 @@ class ArticleController extends Controller
     {
         $t_post = Article::with('user')->get();
 
-        // Paginate the result
         $t_post = Article::with('user')->paginate(6);
 
         return view('article.index', compact('t_post'));

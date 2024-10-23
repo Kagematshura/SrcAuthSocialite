@@ -34,7 +34,7 @@ class ProfileController extends Controller
 }
     public function show($id)
     {
-        $user = User::findOrFail($id); // Find the user by ID or return 404 if not found
+        $user = User::findOrFail($id);
         return view('profile.show', compact('user')); // Pass the user object to the view
     }
 

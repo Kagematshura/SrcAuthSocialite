@@ -115,8 +115,19 @@
         </div>
     </div>
 
+
+
     <!-- Transactions Table -->
     <div class="bg-white p-4 rounded-lg shadow-md mt-8">
+    <!-- Month Filter -->
+    <form method="GET" action="{{ route('dashboard.index') }}">
+        <select name="month" onchange="this.form.submit()">
+        <option value="">All Months</option>
+        @foreach (['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $index => $monthName)
+            <option value="{{ $index + 1 }}" {{ request('month') == $index + 1 ? 'selected' : '' }}>{{ $monthName }}</option>
+        @endforeach
+        </select>
+    </form>
         <h2 class="text-xl font-semibold mb-4">Recent Transactions</h2>
         <div class="overflow-x-auto">
             <table class="table-auto w-full text-left border-collapse">
@@ -293,7 +304,5 @@ document.querySelectorAll('.edit-button').forEach(button => {
         }
     });
 });
-
-
 </script>
 @endsection

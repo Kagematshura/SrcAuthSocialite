@@ -11,7 +11,6 @@ class PaymentController extends Controller
 {
     public function __construct()
     {
-        // Set Midtrans Configuration
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         Config::$isProduction = false; // Change to true in production
         Config::$isSanitized = true;
@@ -20,7 +19,6 @@ class PaymentController extends Controller
 
     public function create(Request $request)
     {
-        // Validate request data
         $request->validate([
             'first_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',

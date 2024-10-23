@@ -17,14 +17,12 @@ class DraftController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the input data
         $request->validate([
             'title' => 'required|max:255',
             'content' => 'required',
             'type' => 'required|string',
         ]);
 
-        // Store the draft
         Draft::create($request->all());
 
         return redirect()->route('drafts.create')->with('success', 'Draft saved successfully!');
@@ -55,7 +53,6 @@ class DraftController extends Controller
             'sts' => $draft->type,
         ]);
 
-        // Delete the draft
         $draft->delete();
 
         return redirect()->route('drafts.index')->with('success', 'Article approved and published.');
@@ -65,7 +62,6 @@ class DraftController extends Controller
     {
         $draft = Draft::find($id);
 
-        // Update the status to pending
         $draft->status = 'pending';
         $draft->save();
 

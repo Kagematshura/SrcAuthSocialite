@@ -22,7 +22,7 @@ class RegisterController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('welcome'); // Adjust the redirect route as needed
+        return redirect()->route('welcome');
     }
 
     protected function validator(array $data)

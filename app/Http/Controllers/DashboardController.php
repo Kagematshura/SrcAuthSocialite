@@ -9,34 +9,40 @@ use App\Models\Transaction;
 class DashboardController extends Controller
 {
     public function index(Request $request)
-    {
-        $year = $request->input('year', date('Y'));
+{
+    $year = $request->input('year', date('Y'));
+    $month = $request->input('month', null);
 
-        $transactions = Transaction::whereYear('created_at', $year)->get();
+    $query = Transaction::whereYear('created_at', $year);
 
-        $monthlyData = Transaction::select(
-                DB::raw('SUM(gross_amount) as total'),
-                DB::raw('MONTH(created_at) as month')
-            )
-            ->whereYear('created_at', $year)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
-
-        $data = array_fill(0, 12, 0);
-
-        foreach ($monthlyData as $entry) {
-            $data[$entry->month - 1] = $entry->total;
-        }
-
-        // for the pie chart
-        $divisionData = Transaction::select('division', DB::raw('SUM(gross_amount) as total'))
-            ->whereYear('created_at', $year)
-            ->groupBy('division')
-            ->get();
-
-        return view('dashboard', compact('data', 'transactions', 'divisionData', 'year'));
+    if ($month) {
+        $query->whereMonth('created_at', $month);
     }
+
+    $transactions = $query->get();
+
+    $monthlyData = Transaction::select(
+            DB::raw('SUM(gross_amount) as total'),
+            DB::raw('MONTH(created_at) as month')
+        )
+        ->whereYear('created_at', $year)
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
+
+    $data = array_fill(0, 12, 0);
+
+    foreach ($monthlyData as $entry) {
+        $data[$entry->month - 1] = $entry->total; // Subtract 1 for zero-based index
+    }
+
+    $divisionData = Transaction::select('division', DB::raw('SUM(gross_amount) as total'))
+        ->whereYear('created_at', $year)
+        ->groupBy('division')
+        ->get();
+
+    return view('dashboard', compact('data', 'transactions', 'divisionData', 'year', 'month'));
+}
 
     public function pie()
     {
