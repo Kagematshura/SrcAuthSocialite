@@ -57,6 +57,11 @@
                         <i class="bx bx-user"></i>
                         <span class="link_name">User</span>
                     </a>
+                </li><li>
+                    <a href="" class="pl-6" onclick="updatePath('Utilities', 'WhatsApp')">
+                        <i class='bx bxl-whatsapp'></i>
+                        <span class="link_name">WhatsApp</span>
+                    </a>
                 </li>
                 <li>
                     <a href="{{ route('drafts.index') }}" class="pl-6" onclick="updatePath('Utilities', 'Drafts')">
@@ -95,17 +100,18 @@
 <section class="home-section flex-1 p-8">
     <h1 class="my-8 text-center">Dashboard</h1>
 
-    <form method="GET" action="{{ route('dashboard.index') }}">
-        <select name="year" onchange="this.form.submit()">
-            @for ($i = 2023; $i <= date('Y'); $i++)
-                <option value="{{ $i }}" {{ request('year') == $i ? 'selected' : '' }}>{{ $i }}</option>
-            @endfor
-        </select>
-    </form>
-
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Bar Chart -->
         <div class="bg-white p-4 rounded-lg shadow-md">
+            {{-- Year Filter --}}
+            <form method="GET" action="{{ route('dashboard.index') }}">
+                Select Year:
+                <select class="px-6" name="year" onchange="this.form.submit()">
+                    @for ($i = 2023; $i <= date('Y'); $i++)
+                        <option value="{{ $i }}" {{ request('year') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                    @endfor
+                </select>
+            </form>
             <canvas id="barChart"></canvas>
         </div>
 
@@ -115,18 +121,31 @@
         </div>
     </div>
 
-
-
     <!-- Transactions Table -->
     <div class="bg-white p-4 rounded-lg shadow-md mt-8">
     <!-- Month Filter -->
     <form method="GET" action="{{ route('dashboard.index') }}">
+        <p>Select Month: </p>
         <select name="month" onchange="this.form.submit()">
-        <option value="">All Months</option>
-        @foreach (['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $index => $monthName)
-            <option value="{{ $index + 1 }}" {{ request('month') == $index + 1 ? 'selected' : '' }}>{{ $monthName }}</option>
-        @endforeach
+            <option value="">All Months</option>
+            @foreach (['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $index => $monthName)
+                <option value="{{ $index + 1 }}" {{ request('month') == $index + 1 ? 'selected' : '' }}>{{ $monthName }}</option>
+            @endforeach
         </select>
+
+        {{-- <!-- Date Range Filter (within the selected month) -->
+        <div class="mt-4">
+            <p>Select Date Range: </p>
+            <label for="start_date">Start Date: </label>
+            <input type="date" name="start_date" value="{{ request('start_date') }}">
+
+            <label for="end_date">End Date: </label>
+            <input type="date" name="end_date" value="{{ request('end_date') }}">
+
+            <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition duration-300">
+                Filter
+            </button>
+        </div> --}}
     </form>
         <h2 class="text-xl font-semibold mb-4">Recent Transactions</h2>
         <div class="overflow-x-auto">
@@ -181,6 +200,10 @@
                     @endforelse
                 </tbody>
             </table>
+            <!-- Pagination links -->
+    <div class="mt-4">
+        {{ $transactions->links() }}
+    </div>
         </div>
     </div>
 

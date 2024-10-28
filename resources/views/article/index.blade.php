@@ -428,7 +428,6 @@ function showAllArticles() {
     createArticleBtn.style.display = 'none';
 }
 
-
 function menuBtnChange() {
     const closeBtn = document.querySelector("#btn");
     if (closeBtn.classList.contains("bx-menu")) {

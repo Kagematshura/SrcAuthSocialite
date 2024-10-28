@@ -10,39 +10,38 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
 {
-    $year = $request->input('year', date('Y'));
-    $month = $request->input('month', null);
+    $query = Transaction::query();
 
-    $query = Transaction::whereYear('created_at', $year);
-
-    if ($month) {
-        $query->whereMonth('created_at', $month);
+    if ($request->filled('month')) {
+        $query->whereMonth('created_at', $request->month);
     }
 
-    $transactions = $query->get();
+    if ($request->filled('start_date') && $request->filled('end_date')) {
+        $query->whereBetween('created_at', [$request->start_date, $request->end_date]);
+    }
+
+    $transactions = $query->paginate(10);
 
     $monthlyData = Transaction::select(
-            DB::raw('SUM(gross_amount) as total'),
-            DB::raw('MONTH(created_at) as month')
-        )
-        ->whereYear('created_at', $year)
-        ->groupBy('month')
-        ->orderBy('month')
-        ->get();
+        DB::raw('SUM(gross_amount) as total'),
+        DB::raw('MONTH(created_at) as month')
+    )
+    ->groupBy('month')
+    ->orderBy('month')
+    ->get();
 
-    $data = array_fill(0, 12, 0);
-
+    $data = array_fill(0, 12, 0);  // Default array with 12 months filled with 0
     foreach ($monthlyData as $entry) {
-        $data[$entry->month - 1] = $entry->total; // Subtract 1 for zero-based index
+        $data[$entry->month - 1] = $entry->total;
     }
 
     $divisionData = Transaction::select('division', DB::raw('SUM(gross_amount) as total'))
-        ->whereYear('created_at', $year)
         ->groupBy('division')
         ->get();
 
-    return view('dashboard', compact('data', 'transactions', 'divisionData', 'year', 'month'));
+    return view('dashboard', compact('data', 'transactions', 'divisionData'));
 }
+
 
     public function pie()
     {
