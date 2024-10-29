@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\FaviconController;
 
 // Home route
 Route::get('/', function () {
@@ -81,3 +82,7 @@ Route::post('/payment/store', [PaymentController::class, 'create']);
 Route::post('/payment', [PaymentController::class, 'store']);
 Route::post('/payment/notification', [PaymentController::class, 'handleMidtransNotification']);
 
+// Favicons
+Route::get('/favicon', [FaviconController::class, 'showUploadForm'])->name('favicon.index');
+Route::post('/upload-favicon', [FaviconController::class, 'uploadFavicon'])->name('upload.favicon');
+Route::delete('/favicons/{id}', [FaviconController::class, 'deleteFavicon'])->name('delete.favicon');

@@ -57,7 +57,12 @@
                         <i class="bx bx-user"></i>
                         <span class="link_name">User</span>
                     </a>
-                </li><li>
+                </li>
+                <a href="{{ route('favicon.index') }}" class="pl-6" onclick="updatePath('Utilities', 'User')">
+                    <i class='bx bx-image-add'></i>
+                    <span class="link_name">Favicons</span>
+                </a>
+                <li>
                     <a href="" class="pl-6" onclick="updatePath('Utilities', 'WhatsApp')">
                         <i class='bx bxl-whatsapp'></i>
                         <span class="link_name">WhatsApp</span>
@@ -94,7 +99,6 @@
         </li>
     </ul>
 </div>
-
 
 {{-- Content --}}
 <section class="home-section flex-1 p-8">
@@ -135,7 +139,7 @@
         <button type="submit" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow hover:bg-[#3c573b] transition duration-300">Filter</button>
         <button type="button" class="bg-[#588157] text-white px-4 py-2 rounded-lg shadow hover:bg-[#3c573b] transition duration-300" onclick="location.href='{{ route('dashboard.index') }}'">Refresh</button>
     </form>
-        <h2 class="text-xl font-semibold mb-4">Recent Transactions</h2>
+        <h2 class="text-xl font-semibold mb-4">Recent   Transactions</h2>
         <div class="overflow-x-auto">
             <table class="table-auto w-full text-left border-collapse">
                 <thead>
