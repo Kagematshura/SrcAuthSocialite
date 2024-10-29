@@ -42,7 +42,6 @@ class DashboardController extends Controller
     return view('dashboard', compact('data', 'transactions', 'divisionData'));
 }
 
-
     public function pie()
     {
         $contributions = Transaction::select('category', DB::raw('SUM(amount) as total_amount'))
