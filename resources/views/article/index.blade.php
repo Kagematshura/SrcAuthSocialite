@@ -63,9 +63,15 @@
                     <span class="link_name">Favicons</span>
                 </a>
                 <li>
-                    <a href="" class="pl-6" onclick="updatePath('Utilities', 'WhatsApp')">
+                    <a href="{{route('contacts.index')}}" class="pl-6" onclick="updatePath('Utilities', 'WhatsApp')">
                         <i class='bx bxl-whatsapp'></i>
                         <span class="link_name">WhatsApp</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{route('mails.index')}}" class="pl-6" onclick="updatePath('Utilities', 'WhatsApp')">
+                        <i class='bx bx-envelope'></i>
+                        <span class="link_name">Mails</span>
                     </a>
                 </li>
                 <li>

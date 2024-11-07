@@ -2,11 +2,7 @@
 
 @section('content')
 @vite('resources/css/sidebar.css')
-<head>
-    @php
-        $favicon = App\Models\Favicon::latest()->first();
-    @endphp
-</head>
+
 {{-- Sidebar and Content Wrapper --}}
 <div class="sidebar">
     <div class="logo_details">
@@ -109,51 +105,48 @@
 </div>
 
 <section class="home-section flex-1 p-8">
-<div class="flex items-center justify-center">
-    <form action="{{ route('upload.favicon') }}" method="POST" enctype="multipart/form-data" class="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
-        @csrf
-        <h2 class="text-2xl font-bold text-center text-black mb-6">Upload Favicon</h2>
-        @if($favicon && $favicon->favicon_path)
-            <div class="mb-6 text-center">
-                <img alt="Current Favicon" class="w-42 h-42 mx-auto border border-gray-300" src="{{ asset('storage/' . $favicon->favicon_path) }}">
-                <p class="text-sm text-gray-500 mt-2">Current Image</p>
-            </div>
-        @endif
-        <label for="favicon" class="block text-gray-700 text-sm font-semibold mb-2">Choose a new Favicon:</label>
-        <input type="file" name="favicon" accept="image/x-icon,image/png" required class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-4 py-2 px-3 transition duration-200 ease-in-out">
-        <button type="submit" class="w-full bg-[#588157] text-white px-4 py-2 rounded-lg hover:bg-[#3c573b] transition duration-300 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Upload</button>
-    </form>
-</div>
-<h3 class="text-lg font-semibold mb-4">Previous Favicons</h3>
-<div class="overflow-x-auto">
-    <table class="min-w-full bg-white rounded">
-        <thead>
-            <tr>
-                <th class="px-6 py-3 border-b bg-[#2C4A37] text-white font-semibold text-left">Favicon</th>
-                <th class="px-6 py-3 border-b bg-[#2C4A37] text-white font-semibold text-left">Uploaded</th>
-                <th class="px-6 py-3 border-b bg-[#2C4A37] text-white font-semibold text-left">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($favicons as $favicon)
-                <tr class="border-b">
-                    <td class="px-6 py-4">
-                        <img src="{{ asset('storage/' . $favicon->favicon_path) }}" class="w-16 h-16 rounded-full" alt="Favicon">
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ \Carbon\Carbon::parse($favicon->created_at)->diffForHumans() }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <form action="{{ route('delete.favicon', $favicon->id) }}" method="POST">
+<div class="container mx-auto p-8 max-w-7xl">
+    <div class="flex items-center justify-between">
+        <h1 class="text-5xl font-extrabold mb-10 text-[#DAD7CD]">Mailbox</h1>
+        <a href="{{ route('mails.create') }}" class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300">
+            Test Create
+        </a>
+    </div>
+
+    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+        <table class="min-w-full divide-y divide-gray-300">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Sent by</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Email</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Contact</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Sent at</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"></th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @foreach ($mails as $mail)
+                    <tr class="hover:bg-gray-100 transition duration-200 ease-in-out">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <a href="{{ route('mails.show', $mail->id) }}" class="text-blue-600 hover:text-blue-800">
+                                {{ $mail->name }}
+                            </a>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $mail->email }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $mail->phone }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $mail->created_at->timezone('Asia/Jakarta')->format('F d, Y h:i:s A') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <form action="{{ secure_url('/mails', $mail->id) }}" method="POST" class="inline-block">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-800 font-medium">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+                            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition duration-300">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+        </table>
+    </div>
 </div>
 </section>
 <script>

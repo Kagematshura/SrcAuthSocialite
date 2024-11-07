@@ -13,6 +13,8 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\FaviconController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\MailController;
 
 // Home route
 Route::get('/', function () {
@@ -86,3 +88,17 @@ Route::post('/payment/notification', [PaymentController::class, 'handleMidtransN
 Route::get('/favicon', [FaviconController::class, 'showUploadForm'])->name('favicon.index');
 Route::post('/upload-favicon', [FaviconController::class, 'uploadFavicon'])->name('upload.favicon');
 Route::delete('/favicons/{id}', [FaviconController::class, 'deleteFavicon'])->name('delete.favicon');
+
+// Mail
+Route::get('/mails/create', [MailController::class, 'create'])->name('mails.create');
+Route::post('/mails/store', [MailController::class, 'store'])->name('mails.store');
+Route::get('/mails', [MailController::class, 'index'])->name('mails.index');
+Route::get('/mails/{id}', [MailController::class, 'show'])->name('mails.show');
+Route::delete('/mails/{mail}', [MailController::class, 'destroy'])->name('mails.destroy');
+
+// Contacts
+Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+Route::get('/contacts/getData', [ContactController::class, 'data'])->name('contacts.data');
+Route::post('/contact', [ContactController::class, 'store'])->name('contacts.store');
+Route::put('/contact/{id}', [ContactController::class, 'update'])->name('contacts.update');
+Route::delete('/contact/{contact}', [ContactController::class, 'destroy'])->name('contacts.destroy');
